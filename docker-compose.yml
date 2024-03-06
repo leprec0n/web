@@ -1,0 +1,9 @@
+name: leprecon
+services:
+  web:
+    build: .
+    container_name: web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./www:/usr/share/nginx/html
