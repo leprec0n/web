@@ -1,0 +1,14 @@
+include    /etc/nginx/mime.types;
+
+server {
+    listen 3000;
+    server_name leprecon;
+    access_log /var/log/nginx/access.log;
+    
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /home {
+        proxy_pass ${DEFAULT_HOST}; # !TODO change to environment variable.
+    }
+}
