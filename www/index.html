@@ -2,11 +2,10 @@
 <html>
     <head>
         <title>Leprecon</title>
-        <script type="module" src="scripts/dynamic.js"></script>
-        <script type="module" src="3p/htmx.min.js"></script>
+        <script src="3p/htmx.min.js"></script>
     </head>
-    <body id="content" hx-trigger="load" hx-push-url="true">
-        <h1>Loading...</h1>
+    <body>
+        <h1 id="content" hx-get="/home" hx-trigger="load" hx-target="this" hx-swap="outerHTML">Loading...</h1>
     </body>
     <footer>
 
