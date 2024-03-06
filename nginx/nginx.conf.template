@@ -1,7 +1,7 @@
 include    /etc/nginx/mime.types;
 
 server {
-    listen 3000;
+    listen 80;
     server_name leprecon;
     access_log /var/log/nginx/access.log;
     
