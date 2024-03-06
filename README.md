@@ -15,3 +15,10 @@ Nginx is used as the web server to serve static content to the client. The follo
 docker compose up -d
 ```
 > Remove the -d if you want to see the container logs
+
+## Building
+Building the project can be done using the following command:
+```bash
+docker build -t jarnoweemen/leprecon:{version}-web .
+```
+> Change {version} to the next version following sementics (e.g., 1.0.0)
