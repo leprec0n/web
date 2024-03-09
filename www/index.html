@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Leprecon</title>
+    <script src="3p/htmx.min.js"></script>
+  </head>
+  <body>
+    <h1
+      id="content"
+      hx-get="/home"
+      hx-trigger="load"
+      hx-target="this"
+      hx-swap="outerHTML"
+    >
+      Loading...
+    </h1>
+  </body>
+  <footer></footer>
+</html>

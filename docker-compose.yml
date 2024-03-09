@@ -1,0 +1,11 @@
+name: leprecon
+services:
+  web:
+    image: jarnoweemen/leprecon:1.0.0-web
+    container_name: web
+    volumes:
+      - ./www:/usr/share/nginx/html # Mount static files
+      - ./nginx:/etc/nginx/templates # Mount nginx template (includes environment variables)
+    network_mode: host
+    environment:
+      DEFAULT_HOST: http://127.0.0.1:8080/home
