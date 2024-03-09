@@ -4,12 +4,16 @@ on:
   push:
     branches:
       - development
+  pull_request:
+    branches:
+      - main
 jobs:
   lint:
     uses: ./.github/workflows/lint.yaml
   build_and_push:
     needs: lint
     runs-on: ubuntu-22.04
+    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
     permissions:
       packages: write
     steps:
