@@ -10,7 +10,7 @@ document.body.addEventListener("htmx:responseError", function (e) {
 
   if (status.includes(5)) {
     document.getElementById(
-      e.detail.requestConfig.headers["HX-Trigger"]
+      e.detail.requestConfig.headers["HX-Trigger"],
     ).innerHTML = "Service down";
   }
 });
