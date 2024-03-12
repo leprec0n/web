@@ -8,4 +8,4 @@ services:
       - ./nginx:/etc/nginx/templates # Mount nginx template (includes environment variables)
     network_mode: host
     environment:
-      DEFAULT_HOST: http://127.0.0.1:8080/home
+      DEFAULT_HOST: http://127.0.0.1:8080

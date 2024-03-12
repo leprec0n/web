@@ -1,5 +1,6 @@
 {
   "prettier.tabWidth": 2,
+  "prettier.trailingComma": "all",
   "editor.tabSize": 2,
   "[html][javascript][css][markdown][yaml][json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",

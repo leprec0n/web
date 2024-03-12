@@ -6,7 +6,7 @@
   </head>
   <body>
     <h1
-      id="content"
+      id="default"
       hx-get="/home"
       hx-trigger="load"
       hx-target="this"
@@ -14,6 +14,16 @@
     >
       Loading...
     </h1>
+    <div
+      id="loading-service"
+      hx-get="/loading"
+      hx-trigger="load"
+      hx-target="this"
+      hx-swap="outerHTML"
+    >
+      Loading...
+    </div>
   </body>
+  <script src="js/htmx_handlers.js"></script>
   <footer></footer>
 </html>
