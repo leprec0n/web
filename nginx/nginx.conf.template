@@ -11,6 +11,14 @@ server {
     error_page 404 /404.html;
 
     location /home {
-        proxy_pass ${DEFAULT_HOST}; # !TODO change to environment variable.
+        proxy_pass ${DEFAULT_HOST}/home; # !TODO change to environment variable.
+    }
+
+    location /loading {
+        proxy_pass ${DEFAULT_HOST}/loading; # !TODO change to environment variable.
+    }
+
+    location /manifest.json {
+        expires 1d;
     }
 }
