@@ -17,4 +17,8 @@ server {
     location /loading {
         proxy_pass ${DEFAULT_HOST}/loading; # !TODO change to environment variable.
     }
+
+    location /manifest.json {
+        expires 1d;
+    }
 }
