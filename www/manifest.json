@@ -2,7 +2,8 @@
   "name": "Leprecon",
   "short_name": "Leprecon",
   "start_url": ".",
-  "display": "browser",
+  "display": "standalone",
+  "theme_color": "#0F0",
   "background_color": "#fff",
   "description": "A gambling platform.",
   "icons": [
@@ -34,7 +35,8 @@
     {
       "src": "icon/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
