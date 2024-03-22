@@ -8,10 +8,10 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    error_page 404 /404.html;
+    error_page 404 /errors/404.html;
 
     location /home {
-        proxy_pass ${DEFAULT_HOST}/home; # !TODO change to environment variable.
+        proxy_pass ${DEFAULT_HOST}/; # !TODO change to environment variable.
     }
 
     location /loading {
