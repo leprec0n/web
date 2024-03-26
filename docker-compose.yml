@@ -8,4 +8,7 @@ services:
       - ./nginx:/etc/nginx/templates # Mount nginx template (includes environment variables)
     network_mode: host
     environment:
-      DEFAULT_HOST: http://127.0.0.1:8080
+      DEFAULT_HOST: ${DEFAULT_HOST}
+      AUTH_HOST: ${AUTH_HOST}
+      CLIENT_ID: ${CLIENT_ID}
+      REDIRECT_URL: ${REDIRECT_URL}

@@ -11,11 +11,25 @@ server {
     error_page 404 /errors/404.html;
 
     location /home {
-        proxy_pass ${DEFAULT_HOST}/; # !TODO change to environment variable.
+        proxy_pass ${DEFAULT_HOST}/;
     }
 
     location /loading {
-        proxy_pass ${DEFAULT_HOST}/loading; # !TODO change to environment variable.
+        proxy_pass ${DEFAULT_HOST}/loading;
+    }
+
+    location /login {
+        #auth_request /auth;
+        #auth_request_set $auth_status $upstream_status;
+        return ${AUTH_HOST}/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&state=STATE; # !TODO Change state to a random combination per request.
+    }
+
+    location /auth {
+        internal;
+        proxy_pass ${AUTH_HOST}/authorize?response_type=token&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&state=STATE;
+        proxy_pass_request_body off;
+        proxy_set_header Content-Length "";
+        proxy_set_header X-Original-URI $request_uri;
     }
 
     location /manifest.json {
