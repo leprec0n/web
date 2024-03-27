@@ -10,6 +10,12 @@ server {
 
     error_page 404 /errors/404.html;
 
+    # location / {
+    #     if ($arg_auth_token) { PARAMETER CHECK
+    #         return 502;
+    #     }
+    # }
+
     location /home {
         proxy_pass ${DEFAULT_HOST}/;
     }
