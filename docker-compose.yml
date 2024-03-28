@@ -4,8 +4,7 @@ services:
     image: jarnoweemen/leprecon:1.0.0-web
     container_name: web
     volumes:
-      - ./www:/usr/share/nginx/html # Mount static files
-      - ./nginx:/etc/nginx/templates # Mount nginx template (includes environment variables)
+      - ./www:/usr/local/openresty/nginx/html # Mount static files
     network_mode: host
     environment:
       DEFAULT_HOST: ${DEFAULT_HOST}
