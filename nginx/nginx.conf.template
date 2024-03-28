@@ -33,7 +33,7 @@ server {
     }
 
     location /token {
-        content_by_lua_block {
+        rewrite_by_lua_block {
             function remove_user_key()
                 ngx.req.read_body()
                 -- log the original body so we can compare to the new one later
@@ -42,22 +42,17 @@ server {
 
                 -- grab the POST parameters as a table
                 local params = ngx.req.get_post_args()
-                local newbody = "{"
-
-                local k_test = "key"
-                local v_test = "test"
+                local newbody = ""
 
                 for k,v in pairs(params) do
-                    newbody = newbody..'"'..k..'":"'..v..'",'
-                    newbody = newbody..'"'..k_test..'":"'..v_test..'",'
+                    newbody = newbody..k..'='..v..'&'
                 end
-                --remove the last trailing comma before closing this off
-                newbody = string.sub(newbody, 0, #newbody-1)
-                newbody = newbody.."}"
+
+                newbody = newbody.."client_id"..'='..os.getenv("CLIENT_ID")..'&'
+                newbody = newbody.."client_secret"..'='..os.getenv("CLIENT_SECRET")
 
                 ngx.req.set_body_data(newbody)
                 ngx.log(ngx.STDERR, newbody)
-                ngx.log(ngx.STDERR, os.getenv("AUTH_HOST"))
                 return
             end
 
@@ -65,6 +60,8 @@ server {
                 remove_user_key()
             end
         }
+        proxy_pass ${AUTH_HOST}/oauth/token;
+        # return 200; !TODO Store auth_token in account 
     }
 
     location /manifest.json {
