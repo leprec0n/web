@@ -1,21 +1,23 @@
-include    /etc/nginx/mime.types;
+include    /usr/local/openresty/nginx/conf/mime.types;
 
 server {
     listen 80;
     server_name leprecon;
-    access_log /var/log/nginx/access.log;
-    
-    root /usr/share/nginx/html;
+
+    root /usr/local/openresty/nginx/html;
     index index.html;
+
+    error_log logs/error.log warn;
+    access_log logs/access.log combined;
 
     error_page 404 /errors/404.html;
 
     location /home {
-        proxy_pass ${DEFAULT_HOST}/; # !TODO change to environment variable.
+        proxy_pass ${DEFAULT_HOST}/;
     }
 
     location /loading {
-        proxy_pass ${DEFAULT_HOST}/loading; # !TODO change to environment variable.
+        proxy_pass ${DEFAULT_HOST}/loading;
     }
 
     location /manifest.json {
