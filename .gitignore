@@ -1,3 +1,3 @@
 node_modules
 .env
-www/js/auth0.js
+www/js/client.js
