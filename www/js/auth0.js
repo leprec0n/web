@@ -9,13 +9,15 @@ const client = new auth0.Auth0Client({
   },
 });
 
+let userProfile = null;
 await updateUI();
 
-const query = window.location.search;
-if (query.includes("code=") && query.includes("state=")) {
-  await client.handleRedirectCallback();
-  history.replaceState({}, "", "/");
-  await updateUI();
+const query = new URL(document.location).searchParams;
+
+if (query.size !== 0) {
+  checkLoginCode(query);
+  checkAlreadyVerified(query);
+  checkSuccessfulVerification(query);
 }
 
 document.getElementById("login").addEventListener("click", async () => {
@@ -48,8 +50,13 @@ async function updateUI() {
   if (!isAuthenticated) {
     loginState(false);
   } else {
+    userProfile = await client.getUser();
+    verificationState();
     loginState(true);
-    setUserProfile(await client.getUser());
+    console.log(userProfile);
+    console.log(await client.getIdTokenClaims());
+
+    setUserProfile(userProfile);
   }
 }
 
@@ -64,7 +71,54 @@ function loginState(loggedIn) {
 }
 
 function setUserProfile(userProfile) {
-  console.log(userProfile);
   document.getElementById("username").innerText = userProfile.nickname;
   document.getElementById("username").classList = "";
+}
+
+async function verificationState() {
+  if (userProfile === null || userProfile.email_verified) {
+    return;
+  }
+
+  await client.getTokenSilently({ cacheMode: "off" });
+  userProfile = await client.getUser();
+
+  if (userProfile.email_verified) {
+    return;
+  }
+
+  document.getElementById("verified").innerText =
+    "Check email to verify account."; // !TODO Email resend functionality.
+}
+
+async function checkLoginCode(query) {
+  if (query.get("code") && query.get("state")) {
+    await client.handleRedirectCallback();
+    history.replaceState({}, "", "/");
+    await updateUI();
+  }
+}
+
+function checkAlreadyVerified(query) {
+  if (
+    query.get("message") === "This URL can be used only once" &&
+    query.get("success") === "false"
+  ) {
+    // !TODO Show message already verified
+    history.replaceState({}, "", "/");
+  }
+}
+
+function checkSuccessfulVerification(query) {
+  if (
+    query.get("supportSignUp") === "true" &&
+    query.get("supportForgotPassword") === "true" &&
+    query.get("message") ===
+      "Your email was verified. You can continue using the application." &&
+    query.get("success") === "true" &&
+    query.get("code") === "success"
+  ) {
+    // !TODO Show message verification successfull
+    history.replaceState({}, "", "/");
+  }
 }
