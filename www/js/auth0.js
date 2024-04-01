@@ -1,14 +1,3 @@
-const client = new auth0.Auth0Client({
-  domain: "", // !TODO Read through environment variables.
-  clientId: "", // !TODO Read through environment variables.
-  useRefreshTokens: true,
-  cacheLocation: "localstorage",
-  authorizationParams: {
-    redirect_uri: window.location.origin,
-    max_age: 1700,
-  },
-});
-
 let userProfile = null;
 await updateUI();
 
