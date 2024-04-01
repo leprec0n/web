@@ -9,7 +9,6 @@ const client = new auth0.Auth0Client({
   },
 });
 
-// console.log(await client.getTokenSilently({ cacheMode: "off" }));
 let userProfile = null;
 await updateUI();
 
