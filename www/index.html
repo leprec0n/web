@@ -86,7 +86,21 @@
         >
           Loading...
         </div>
-        <h2 id="verified"></h2>
+        <div class="bg-pink-300">
+          <h2 id="verified"></h2>
+          <button
+            id="send-verification-mail"
+            class="hidden invisible"
+            hx-post="/email/verification"
+          >
+            Send mail
+          </button>
+        </div>
+        <div class="bg-green-400">
+          <button id="test-auth" hx-get="/test" hx-swap="none">
+            Test Auth
+          </button>
+        </div>
         <div class="!max-h-none !max-w-none">
           <div>OVERLOAD</div>
           <div>OVERLOAD</div>

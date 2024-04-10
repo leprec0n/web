@@ -1,22 +1,3 @@
-let userProfile = null;
-await updateUI();
-
-const query = new URL(document.location).searchParams;
-
-if (query.size !== 0) {
-  checkLoginCode(query);
-  checkAlreadyVerified(query);
-  checkSuccessfulVerification(query);
-}
-
-document.getElementById("login").addEventListener("click", async () => {
-  login();
-});
-
-document.getElementById("logout").addEventListener("click", async () => {
-  logout();
-});
-
 function login() {
   client.loginWithRedirect({
     authorizationParams: {
@@ -32,6 +13,37 @@ function logout() {
     },
   });
 }
+
+let userProfile = null;
+let token = null;
+try {
+  token = await client.getTokenSilently({ cacheMode: "off" });
+} catch (e) {
+  if (e.toString() == "Error: Unknown or invalid refresh token.") {
+    logout();
+    login();
+  }
+
+  console.log(e);
+}
+await updateUI();
+
+const query = new URL(document.location).searchParams;
+
+if (query.size !== 0) {
+  checkLoginCode(query);
+  checkAlreadyVerified(query);
+  checkSuccessfulVerification(query);
+  checkAccessExpired(query);
+}
+
+document.getElementById("login").addEventListener("click", async () => {
+  login();
+});
+
+document.getElementById("logout").addEventListener("click", async () => {
+  logout();
+});
 
 async function updateUI() {
   const isAuthenticated = await client.isAuthenticated();
@@ -65,12 +77,11 @@ function setUserProfile(userProfile) {
 }
 
 async function verificationState() {
+  document.getElementById("send-verification-mail").classList =
+    "hidden invisible";
   if (userProfile === null || userProfile.email_verified) {
     return;
   }
-
-  await client.getTokenSilently({ cacheMode: "off" });
-  userProfile = await client.getUser();
 
   if (userProfile.email_verified) {
     return;
@@ -78,6 +89,7 @@ async function verificationState() {
 
   document.getElementById("verified").innerText =
     "Check email to verify account."; // !TODO Email resend functionality.
+  document.getElementById("send-verification-mail").classList = "visible";
 }
 
 async function checkLoginCode(query) {
@@ -111,3 +123,20 @@ function checkSuccessfulVerification(query) {
     history.replaceState({}, "", "/");
   }
 }
+
+function checkAccessExpired(query) {
+  if (
+    query.get("message") === "Access expired." &&
+    query.get("success") === "false"
+  ) {
+    // !TODO Show expired verification link
+    history.replaceState({}, "", "/");
+  }
+}
+
+document.body.addEventListener("htmx:configRequest", async (e) => {
+  // evt.detail.parameters["id"] = userProfile.sub;
+  // e.detail.headers["Authorization"] = `Bearer ${token}`;
+  // e.detail.headers["Content-Type"] = `application/x-www-form-urlencoded`;
+  e.detail.headers["Accept-Encoding"] = "gzip";
+});
