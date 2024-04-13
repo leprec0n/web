@@ -9,8 +9,6 @@ server {
     root /usr/local/openresty/nginx/html;
     index index.html;
 
-    set $unauthorized 0;
-
     error_log logs/error.log warn;
 
     error_page 404 /errors/404.html;
@@ -25,10 +23,6 @@ server {
 
     location /email/verification {
         rewrite_by_lua_file /etc/nginx/authorise.lua;
-
-        if ($unauthorized = 1)  {
-            return 401;
-        }
 
         proxy_pass ${ACCOUNT_HOST}/email/verification;
     }
