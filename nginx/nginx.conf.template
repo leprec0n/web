@@ -6,23 +6,14 @@ server {
 
     lua_need_request_body on;
 
-    include /etc/nginx/conf.d/set_variables.conf;
-
     root /usr/local/openresty/nginx/html;
     index index.html;
 
+    set $unauthorized 0;
+
     error_log logs/error.log warn;
-    access_log logs/access.log bodylog;
 
     error_page 404 /errors/404.html;
-
-    # body_filter_by_lua_block {
-    #     local resp_body = string.sub(ngx.arg[1], 1, 1000)
-    #     ngx.ctx.buffered = (ngx.ctx.buffered or "") .. resp_body
-    #     if ngx.arg[2] then
-    #         ngx.var.resp_body = ngx.ctx.buffered
-    #     end
-    # }
 
     location /home {
         proxy_pass ${DEFAULT_HOST}/;
@@ -33,7 +24,12 @@ server {
     }
 
     location /email/verification {
-        auth_request /_oauth2_token_introspection;                        
+        rewrite_by_lua_file /etc/nginx/authorise.lua;
+
+        if ($unauthorized = 1)  {
+            return 401;
+        }
+
         proxy_pass ${ACCOUNT_HOST}/email/verification;
     }
 
@@ -41,33 +37,12 @@ server {
         expires 1d;
     }
 
-    location /test {
-        # auth_request /_oauth2_token_introspection;
-        proxy_set_header Accept-Encoding "";
-        proxy_pass        https://dev-0n8xbsyip7om3vav.eu.auth0.com/.well-known/jwks.json;
-
-        # content_by_lua_block {
-        #     local cjson = require("cjson");
-        #     -- local res = cjson.decode();
-        # }
-
-        body_filter_by_lua_block {
-            local resp_body = string.sub(ngx.arg[1], 1, 10000)
-            ngx.ctx.buffered = (ngx.ctx.buffered or "") .. resp_body
-            if ngx.arg[2] then
-                ngx.ctx.resp_body = ngx.ctx.buffered
-            end
-        }
-
-        log_by_lua_file /etc/nginx/authorise.lua;
-    }
-
-    location /_oauth2_token_introspection {
+    location /_validate_token {
         internal;
         
         proxy_method      GET;
-        proxy_pass        https://dev-0n8xbsyip7om3vav.eu.auth0.com/.well-known/jwks.json;        
-
+        proxy_set_header  Accept-Encoding "";
+        proxy_pass        https://dev-0n8xbsyip7om3vav.eu.auth0.com/.well-known/jwks.json;
     }
 
     # Static content

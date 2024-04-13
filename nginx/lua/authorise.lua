@@ -1,32 +1,42 @@
+-- Get token
 local cjson = require("cjson");
-local response_body = ngx.ctx.resp_body;
+local headers= ngx.req.get_headers()
+local token = "";
 
-local data = cjson.decode(response_body);
-local keys = data["keys"];
-local values = '';
-for k, v in pairs(keys) do
-    for key, value in pairs(v) do
-        if type(value) == 'string' then
-            values = values .. "\n" .. value;
-        else
-            for ke, val in pairs(value) do
-                values = values .. "\n" .. val;
-            end
-        end
-    end
+for k, v in pairs(headers) do
+  if k == "authorization" then
+    token = v:gsub("Bearer ", "");
+  end
 end
--- ngx.log(ngx.WARN, values);
 
-local jwt = require("resty.jwt")
-local validators = require("resty.jwt-validators")
-local jwt_obj = jwt:load_jwt("token")
-ngx.log(ngx.WARN, "\n" .. cjson.encode(jwt_obj) .. "\n");
-local cert = "verifierer"
-local secret = "-----BEGIN CERTIFICATE-----\n$" .. cert .. "\n-----END CERTIFICATE-----\n";
-local verified = cjson.encode(jwt:verify_jwt_obj(secret, jwt_obj, {
-    valid_issuers = { "my-trusted-issuer", "my-other-trusteed-issuer" }
-}));
-ngx.log(ngx.WARN, "\n Is verified: " .. verified .. "\n");
+-- Get jwks
+local res = ngx.location.capture("/_validate_token") -- Makes internal request to auth0 jwks endpoint
+local resp_body = res.body
+
+local data = cjson.decode(resp_body);
+local keys = data["keys"];
+local jwks = keys[1];
+
+-- Load jwt
+local resty_jwt = require("resty.jwt")
+-- local validators = require("resty.jwt-validators")
+local jwt = resty_jwt:load_jwt(token)
+
+-- Verify jwt
+if jwt.header.kid ~= jwks.kid then
+  ngx.exit(ngx.HTTP_UNAUTHORIZED)
+end
+
+
+
+
+
+-- local cert = "verifierer"
+-- local secret = "-----BEGIN CERTIFICATE-----\n$" .. cert .. "\n-----END CERTIFICATE-----\n";
+-- local verified = cjson.encode(jwt:verify_jwt_obj(secret, jwt_obj, {
+--     valid_issuers = { "my-trusted-issuer", "my-other-trusteed-issuer" }
+-- }));
+-- ngx.log(ngx.WARN, "\n Is verified: " .. verified .. "\n");
 -- local access_token = ''
 -- for k, v in jwt_obj do
 --     if type(v) == 'string' then

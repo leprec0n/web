@@ -136,7 +136,5 @@ function checkAccessExpired(query) {
 
 document.body.addEventListener("htmx:configRequest", async (e) => {
   // evt.detail.parameters["id"] = userProfile.sub;
-  // e.detail.headers["Authorization"] = `Bearer ${token}`;
-  // e.detail.headers["Content-Type"] = `application/x-www-form-urlencoded`;
-  e.detail.headers["Accept-Encoding"] = "gzip";
+  e.detail.headers["Authorization"] = `Bearer ${token}`;
 });
