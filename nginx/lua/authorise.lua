@@ -41,6 +41,31 @@ local function valid_token(jwt, jwks)
     return false
   end
 
+  -- Create certificate
+  local cert = "-----BEGIN CERTIFICATE-----\n" .. jwks["x5c"][1] .. "\n-----END CERTIFICATE-----\n"
+  local openssl = require('openssl')
+  local x509, err = openssl.x509.read(cert)
+  local pk, err = x509:pubkey()  
+  local pem, err = pk:export() -- Cannot use openssl because of crash when using verify method
+
+  -- Get public key
+  local resty_rsa = require("resty.rsa")
+  local pub, err = resty_rsa:new({ public_key = pem, algorithm = "SHA256" })
+
+  -- Split token into parts
+  local parts = {}
+  for part in token:gmatch("[^.]+") do
+    table.insert(parts, part)
+  end
+
+  -- Verify token
+  local b64 = require("ngx.base64")
+  local verify, err = pub:verify(parts[1] .. "." .. parts[2], b64.decode_base64url(parts[3]))
+  if not verify then
+      ngx.log(ngx.WARN, "Unable to verify token!: " .. err)
+      return false
+  end
+
   return true
 end
 
@@ -48,19 +73,3 @@ end
 if not valid_token(jwt, jwks) then
   ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end
-
-
--- local cert = "verifierer"
--- local secret = "-----BEGIN CERTIFICATE-----\n$" .. cert .. "\n-----END CERTIFICATE-----\n";
--- local verified = cjson.encode(jwt:verify_jwt_obj(secret, jwt_obj, {
---     valid_issuers = { "my-trusted-issuer", "my-other-trusteed-issuer" }
--- }));
--- ngx.log(ngx.WARN, "\n Is verified: " .. verified .. "\n");
--- local access_token = ''
--- for k, v in jwt_obj do
---     if type(v) == 'string' then
---         access_token = access_token .. "\n" .. v
---     end
--- end
--- ngx.log(ngx.WARN, access_token)
--- ngx.log(ngx.WARN, "\n" .. cjson.encode(jwt_obj) .. "\n");

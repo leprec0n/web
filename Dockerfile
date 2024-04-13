@@ -11,9 +11,11 @@ COPY nginx/lua/authorise.lua /etc/nginx/authorise.lua
 # Entrypoint script
 COPY entrypoint.sh /etc/nginx/entrypoint.sh
 
-# Install jwt decoder
+# Install dependencies for jwt authorisation
+RUN apk update && apk upgrade && apk add pkgconfig openssl-dev
 RUN opm get SkyLothar/lua-resty-jwt
-
+RUN luarocks install openssl
+RUN luarocks install lua-resty-rsa
 ENTRYPOINT ["/etc/nginx/entrypoint.sh"]
 
 # Start NGINX
