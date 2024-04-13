@@ -22,13 +22,32 @@ local resty_jwt = require("resty.jwt")
 -- local validators = require("resty.jwt-validators")
 local jwt = resty_jwt:load_jwt(token)
 
--- Verify jwt
-if jwt.header.kid ~= jwks.kid then
-  ngx.exit(ngx.HTTP_UNAUTHORIZED)
+local function valid_token(jwt, jwks)
+  -- Check if valid
+  if jwt.valid ~= true then
+    ngx.log(ngx.WARN, "Invalid token!")
+    return false
+  end
+
+  -- Check header values
+  if jwt.header.kid ~= jwks.kid or jwt.header.alg ~= jwks.alg or jwt.header.typ ~= "JWT" then
+    ngx.log(ngx.WARN, "Invalid header value!")
+    return false
+  end
+
+  -- Check expiry date
+  if jwt.payload.exp <= os.time() then
+    ngx.log(ngx.WARN, "Token expired!")
+    return false
+  end
+
+  return true
 end
 
-
-
+-- Verify jwt
+if not valid_token(jwt, jwks) then
+  ngx.exit(ngx.HTTP_UNAUTHORIZED)
+end
 
 
 -- local cert = "verifierer"
