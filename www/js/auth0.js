@@ -14,18 +14,23 @@ function logout() {
   });
 }
 
+async function get_new_token() {
+  try {
+    token = await client.getTokenSilently({ cacheMode: "off" });
+  } catch (e) {
+    if (e.toString() == "Error: Unknown or invalid refresh token.") {
+      logout();
+      login();
+    }
+
+    console.log(e);
+  }
+}
+
 let userProfile = null;
 let token = null;
-try {
-  token = await client.getTokenSilently({ cacheMode: "off" });
-} catch (e) {
-  if (e.toString() == "Error: Unknown or invalid refresh token.") {
-    logout();
-    login();
-  }
 
-  console.log(e);
-}
+await get_new_token();
 await updateUI();
 
 const query = new URL(document.location).searchParams;
@@ -134,7 +139,16 @@ function checkAccessExpired(query) {
   }
 }
 
+// !TODO Move to htmx handler.js
 document.body.addEventListener("htmx:configRequest", async (e) => {
-  // evt.detail.parameters["id"] = userProfile.sub;
   e.detail.headers["Authorization"] = `Bearer ${token}`;
+});
+
+document.body.addEventListener("htmx:responseError", async (e) => {
+  const id = e.target.id;
+  const status = e.detail.xhr.status;
+
+  if (status === 401) {
+    await get_new_token();
+  }
 });
