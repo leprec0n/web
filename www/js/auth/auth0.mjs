@@ -22,11 +22,17 @@ if (query.size !== 0) {
 export async function getNewToken() {
   try {
     if (Date.now() >= tokenRateLimit) {
-      const token = await client.getTokenSilently({ cacheMode: "off" });
+      const access_token = await client.getTokenSilently({ cacheMode: "off" });
       tokenRateLimit = Date.now() + timeDelay;
-      return token;
+      return {
+        access_token: access_token,
+        id_token: await client.getIdTokenClaims(),
+      };
     } else {
-      return client.getTokenSilently();
+      return {
+        access_token: await client.getTokenSilently(),
+        id_token: await client.getIdTokenClaims(),
+      };
     }
   } catch (e) {
     if (e.toString() == "Error: Unknown or invalid refresh token.") {
