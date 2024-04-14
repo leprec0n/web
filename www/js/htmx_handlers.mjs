@@ -21,17 +21,23 @@ document.body.addEventListener("htmx:responseError", (e) => {
   }
 });
 
+// !TODO Check if authorised request is made
 document.body.addEventListener("htmx:confirm", (e) => {
   e.preventDefault();
 
-  getNewToken().then((token) => {
-    e.detail.elt.bearer = `Bearer ${token}`;
+  getNewToken().then((tokens) => {
+    e.detail.elt.bearer = tokens;
+
     e.detail.issueRequest();
   });
 });
 
-document.body.addEventListener("htmx:configRequest", async (event) => {
-  if (event.detail.elt.bearer) {
-    event.detail.headers["Authorization"] = event.detail.elt.bearer;
+// !TODO Check if authorised request is made
+document.body.addEventListener("htmx:configRequest", async (e) => {
+  const bearer = e.detail.elt.bearer;
+  if (bearer) {
+    e.detail.headers["Authorization"] = `Bearer ${bearer.access_token}`;
+    e.detail.parameters["id_token"] = bearer.id_token.__raw;
   }
+  e.detail.elt.bearer = "";
 });
