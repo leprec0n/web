@@ -4,11 +4,12 @@ server {
     listen 80;
     server_name leprecon;
 
+    lua_need_request_body on;
+
     root /usr/local/openresty/nginx/html;
     index index.html;
 
     error_log logs/error.log warn;
-    access_log logs/access.log combined;
 
     error_page 404 /errors/404.html;
 
@@ -20,8 +21,22 @@ server {
         proxy_pass ${DEFAULT_HOST}/loading;
     }
 
+    location /email/verification {
+        rewrite_by_lua_file /etc/nginx/authorise.lua;
+
+        proxy_pass ${ACCOUNT_HOST}/email/verification;
+    }
+
     location /manifest.json {
         expires 1d;
+    }
+
+    location /_validate_token {
+        internal;
+        
+        proxy_method      GET;
+        proxy_set_header  Accept-Encoding "";
+        proxy_pass        https://dev-0n8xbsyip7om3vav.eu.auth0.com/.well-known/jwks.json;
     }
 
     # Static content
