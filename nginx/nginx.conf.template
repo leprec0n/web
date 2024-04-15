@@ -6,6 +6,10 @@ server {
 
     lua_need_request_body on;
 
+    # Rate limit zone (Global)
+    limit_req zone=client_ip burst=20;
+    limit_req_status 429;
+
     root /usr/local/openresty/nginx/html;
     index index.html;
 
