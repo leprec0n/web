@@ -25,10 +25,10 @@ server {
         proxy_pass ${DEFAULT_HOST}/loading;
     }
 
-    location /email/verification {
+    location /account/email/verification {
         rewrite_by_lua_file /etc/nginx/authorise.lua;
 
-        proxy_pass ${ACCOUNT_HOST}/email/verification;
+        proxy_pass ${ACCOUNT_HOST}/account/email/verification;
     }
 
     location /manifest.json {
