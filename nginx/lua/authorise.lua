@@ -41,6 +41,12 @@ local function valid_token(jwt, jwks)
     return false
   end
 
+  -- Check permissions
+  if next(jwt.payload.permissions) == nil then
+    ngx.log(ngx.WARN, "Empty permissions")
+    return false
+  end
+
   -- Create certificate
   local cert = "-----BEGIN CERTIFICATE-----\n" .. jwks["x5c"][1] .. "\n-----END CERTIFICATE-----\n"
   local openssl = require('openssl')
