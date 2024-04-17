@@ -31,8 +31,8 @@ function setUserProfile(userProfile) {
   document.getElementById("username").classList = "";
 }
 
-function handleSnackbar(snackbar) {
+function handleSnackbar(id) {
   setTimeout(() => {
-    snackbar.className = snackbar.className.replace("visible", "hidden");
+    document.getElementById(id).outerHTML = "";
   }, 5000);
 }

@@ -8,7 +8,6 @@ document.body.addEventListener("htmx:sendError", (e) => {
 // Handles general response errors
 document.body.addEventListener("htmx:responseError", (e) => {
   const status = e.detail.xhr.status;
-  const snackbar = document.getElementById("error-snackbar");
 
   if (status.toString().startsWith(5)) {
     document.getElementById(
@@ -18,12 +17,6 @@ document.body.addEventListener("htmx:responseError", (e) => {
 
   if (status === 401) {
     getNewToken();
-  }
-
-  if (status.toString().startsWith(4)) {
-    document.getElementById("error-message").innerHTML = e.detail.xhr.response;
-    snackbar.classList.replace("hidden", "visible");
-    handleSnackbar(snackbar);
   }
 });
 
@@ -51,12 +44,22 @@ document.body.addEventListener("htmx:configRequest", async (e) => {
 
 // On success
 document.body.addEventListener("htmx:afterRequest", (e) => {
-  if (e.detail.requestConfig.verb != "get") {
-    const snackbar = document.getElementById("success-snackbar");
+  const snackbar = document.getElementById("snackbar");
+  const status = e.detail.xhr.status;
 
-    document.getElementById("success-message").innerHTML =
-      e.detail.xhr.response;
-    snackbar.classList.replace("hidden", "visible");
-    handleSnackbar(snackbar); // Handle in back-end
+  if (e.detail.requestConfig.verb != "get") {
+    if (status.toString().startsWith(2)) {
+      const id = `success-message-${Math.floor(Math.random() * 10000)}`;
+      snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
+      snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
+      handleSnackbar(id);
+    }
+
+    if (status.toString().startsWith(4)) {
+      const id = `error-message-${Math.floor(Math.random() * 10000)}`;
+      snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
+      snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
+      handleSnackbar(id);
+    }
   }
 });
