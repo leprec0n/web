@@ -30,3 +30,9 @@ function setUserProfile(userProfile) {
   document.getElementById("username").innerText = userProfile.nickname;
   document.getElementById("username").classList = "";
 }
+
+function handleSnackbar(id) {
+  setTimeout(() => {
+    document.getElementById(id).outerHTML = "";
+  }, 5000);
+}

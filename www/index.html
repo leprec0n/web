@@ -29,6 +29,7 @@
     />
   </head>
   <body class="grid grid-cols-9 grid-flow-col">
+    <!-- Side bar (left) -->
     <div class="col-span-1 bg-purple-500 p-3 space-y-2">
       <div class="flex space-x-4 items-center">
         <img
@@ -55,6 +56,7 @@
       </div>
     </div>
     <div class="col-span-8 bg-orange-300">
+      <!-- Nav bar (top) -->
       <div
         class="bg-red-500 p-3 h-20 flex justify-end space-x-20 items-center px-20"
       >
@@ -63,11 +65,16 @@
         </div>
         <div class="space-x-2 w-32 justify-end flex">
           <span id="username" class="hidden"></span>
-          <button id="login" class="visible">login</button>
-          <button id="logout" class="hidden invisible">logout</button>
+          <button id="login" onclick="login()" class="visible">login</button>
+          <button id="logout" onclick="logout()" class="hidden invisible">
+            logout
+          </button>
         </div>
       </div>
+      <!-- Body -->
       <div class="bg-blue-500 p-3 overflow-y-scroll h-[calc(100vh-5rem)]">
+        <!-- Snackbars -->
+        <div id="snackbar"></div>
         <h1
           id="default"
           hx-get="/home"
@@ -92,59 +99,11 @@
             id="send-verification-mail"
             class="hidden invisible"
             hx-post="/account/email/verification"
+            hx-target="#snackbar"
+            hx-swap="innerHTML"
           >
             Send mail
           </button>
-        </div>
-        <div class="!max-h-none !max-w-none">
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
-          <div>OVERLOAD</div>
         </div>
         <footer class="bg-yellow-300">Test</footer>
       </div>
