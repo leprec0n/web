@@ -5,19 +5,22 @@ document.body.addEventListener("htmx:sendError", (e) => {
   // !TODO Handle send errors
 });
 
-// Handles response errors
+// Handles general response errors
 document.body.addEventListener("htmx:responseError", (e) => {
-  const id = e.target.id;
   const status = e.detail.xhr.status;
 
-  if (status.toString().includes(5)) {
+  if (status.toString().startsWith(5)) {
     document.getElementById(
       e.detail.requestConfig.headers["HX-Trigger"],
-    ).innerHTML = "Service down"; // !TODO Move to snackbar?
+    ).innerHTML = "Service down";
   }
 
   if (status === 401) {
     getNewToken();
+  }
+
+  if (status.toString().startsWith(4)) {
+    document.getElementById("error-message").innerHTML = e.detail.xhr.response;
   }
 });
 
