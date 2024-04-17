@@ -6,6 +6,10 @@ server {
 
     lua_need_request_body on;
 
+    # Rate limit zone (Global)
+    limit_req zone=client_ip burst=20;
+    limit_req_status 429;
+
     root /usr/local/openresty/nginx/html;
     index index.html;
 
@@ -21,17 +25,17 @@ server {
         proxy_pass ${DEFAULT_HOST}/loading;
     }
 
-    location /email/verification {
+    location /account/email/verification {
         rewrite_by_lua_file /etc/nginx/authorise.lua;
 
-        proxy_pass ${ACCOUNT_HOST}/email/verification;
+        proxy_pass ${ACCOUNT_HOST}/account/email/verification;
     }
 
     location /manifest.json {
         expires 1d;
     }
 
-    location /_validate_token {
+    location /_jwk_key {
         internal;
         
         proxy_method      GET;
@@ -56,7 +60,7 @@ server {
     gzip_comp_level 6;
     gzip_buffers 16 8k;
     gzip_http_version 1.1;
-    gzip_min_length 1500;
+    gzip_min_length 1000;
     gzip_types
         application/atom+xml
         application/geo+json

@@ -19,9 +19,9 @@ if (query.size !== 0) {
   checkAccessExpired(query);
 }
 
-export async function getNewToken() {
+export async function getNewToken(force) {
   try {
-    if (Date.now() >= tokenRateLimit) {
+    if (Date.now() >= tokenRateLimit || force) {
       const access_token = await client.getTokenSilently({ cacheMode: "off" });
       tokenRateLimit = Date.now() + timeDelay;
       return {

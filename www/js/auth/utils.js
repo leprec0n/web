@@ -1,3 +1,5 @@
+const protectedEndpoints = ["/account"]; // !TODO Change endpoint to /account
+
 function login() {
   client.loginWithRedirect({
     authorizationParams: {

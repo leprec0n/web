@@ -10,7 +10,7 @@ for k, v in pairs(headers) do
 end
 
 -- Get jwks
-local res = ngx.location.capture("/_validate_token") -- Makes internal request to auth0 jwks endpoint
+local res = ngx.location.capture("/_jwk_key") -- Makes internal request to auth0 jwks endpoint
 local resp_body = res.body
 
 local data = cjson.decode(resp_body);
@@ -38,6 +38,12 @@ local function valid_token(jwt, jwks)
   -- Check expiry date
   if jwt.payload.exp <= os.time() then
     ngx.log(ngx.WARN, "Token expired!")
+    return false
+  end
+
+  -- Check permissions
+  if next(jwt.payload.permissions) == nil then
+    ngx.log(ngx.WARN, "Empty permissions")
     return false
   end
 
