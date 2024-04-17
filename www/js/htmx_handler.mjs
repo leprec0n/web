@@ -8,6 +8,7 @@ document.body.addEventListener("htmx:sendError", (e) => {
 // Handles general response errors
 document.body.addEventListener("htmx:responseError", (e) => {
   const status = e.detail.xhr.status;
+  const snackbar = document.getElementById("error-snackbar");
 
   if (status.toString().startsWith(5)) {
     document.getElementById(
@@ -21,6 +22,8 @@ document.body.addEventListener("htmx:responseError", (e) => {
 
   if (status.toString().startsWith(4)) {
     document.getElementById("error-message").innerHTML = e.detail.xhr.response;
+    snackbar.classList.replace("hidden", "visible");
+    handleSnackbar(snackbar);
   }
 });
 
@@ -43,5 +46,17 @@ document.body.addEventListener("htmx:configRequest", async (e) => {
   if (bearer) {
     e.detail.headers["Authorization"] = `Bearer ${bearer.access_token}`;
     e.detail.parameters["id_token"] = bearer.id_token.__raw;
+  }
+});
+
+// On success
+document.body.addEventListener("htmx:afterRequest", (e) => {
+  if (e.detail.requestConfig.verb != "get") {
+    const snackbar = document.getElementById("success-snackbar");
+
+    document.getElementById("success-message").innerHTML =
+      e.detail.xhr.response;
+    snackbar.classList.replace("hidden", "visible");
+    handleSnackbar(snackbar); // Handle in back-end
   }
 });

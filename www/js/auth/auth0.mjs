@@ -67,11 +67,3 @@ async function verificationState(userProfile) {
     "Check email to verify account."; // !TODO Email resend functionality.
   document.getElementById("send-verification-mail").classList = "visible";
 }
-
-document.getElementById("login").addEventListener("click", async () => {
-  login();
-});
-
-document.getElementById("logout").addEventListener("click", async () => {
-  logout();
-});
