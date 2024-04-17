@@ -1,4 +1,4 @@
-import { updateUI } from "./auth0.mjs";
+import { getNewToken, updateUI } from "./auth0.mjs";
 
 export async function checkLoginCode(query) {
   if (query.get("code") && query.get("state")) {
@@ -18,7 +18,7 @@ export function checkAlreadyVerified(query) {
   }
 }
 
-export function checkSuccessfulVerification(query) {
+export async function checkSuccessfulVerification(query) {
   if (
     query.get("supportSignUp") === "true" &&
     query.get("supportForgotPassword") === "true" &&
@@ -29,6 +29,8 @@ export function checkSuccessfulVerification(query) {
   ) {
     // !TODO Show message verification successfull
     history.replaceState({}, "", "/");
+    await getNewToken(true);
+    location.reload();
   }
 }
 
