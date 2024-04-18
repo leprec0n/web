@@ -5,12 +5,12 @@ import {
   checkSuccessfulVerification,
 } from "./query_handler.mjs";
 
-await getNewToken();
-await updateUI();
-
 const timeDelay = 300000; // 5 minutes in miliseconds
 const query = new URL(document.location).searchParams;
 let tokenRateLimit = 0;
+
+await getNewToken();
+await updateUI();
 
 if (query.size !== 0) {
   checkLoginCode(query);
