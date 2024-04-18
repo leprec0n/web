@@ -1,4 +1,4 @@
-import { getNewToken } from "./auth/auth0.mjs";
+import { getTokens } from "./auth/auth0.mjs";
 
 // Handle send errors
 document.body.addEventListener("htmx:sendError", (e) => {
@@ -14,27 +14,25 @@ document.body.addEventListener("htmx:responseError", (e) => {
       e.detail.requestConfig.headers["HX-Trigger"],
     ).innerHTML = "Service down";
   }
-
-  if (status === 401) {
-    getNewToken();
-  }
 });
 
 // !TODO Check if authorised request is made
-document.body.addEventListener("htmx:confirm", (e) => {
+document.body.addEventListener("htmx:confirm", async (e) => {
   if (e.detail.path.includes(protectedEndpoints)) {
     e.preventDefault();
 
-    getNewToken().then((tokens) => {
+    let tokens = await getTokens();
+
+    if (tokens) {
       e.detail.elt.bearer = tokens;
 
       e.detail.issueRequest();
-    });
+    }
   }
 });
 
 // !TODO Check if authorised request is made
-document.body.addEventListener("htmx:configRequest", async (e) => {
+document.body.addEventListener("htmx:configRequest", (e) => {
   const bearer = e.detail.elt.bearer;
   if (bearer) {
     e.detail.headers["Authorization"] = `Bearer ${bearer.access_token}`;
@@ -49,14 +47,13 @@ document.body.addEventListener("htmx:afterRequest", (e) => {
 
   if (e.detail.requestConfig.verb != "get") {
     if (status.toString().startsWith(2)) {
-      const id = `success-message-${Math.floor(Math.random() * 10000)}`;
-      snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
-      snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
+      const id = `succes-snackbar-${Math.floor(Math.random() * 10000)}`;
+      e.detail.target.childNodes[e.detail.target.childNodes.length - 1].id = id;
       handleSnackbar(id);
     }
 
-    if (status.toString().startsWith(4)) {
-      const id = `error-message-${Math.floor(Math.random() * 10000)}`;
+    if (status.toString().startsWith(4) && status !== 401) {
+      const id = `error-snackbar-${Math.floor(Math.random() * 10000)}`;
       snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
       snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
       handleSnackbar(id);

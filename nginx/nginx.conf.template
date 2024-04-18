@@ -7,7 +7,7 @@ server {
     lua_need_request_body on;
 
     # Rate limit zone (Global)
-    limit_req zone=client_ip burst=20;
+    limit_req zone=client_ip burst=50 nodelay;
     limit_req_status 429;
 
     root /usr/local/openresty/nginx/html;
@@ -16,14 +16,6 @@ server {
     error_log logs/error.log warn;
 
     error_page 404 /errors/404.html;
-
-    location /home {
-        proxy_pass ${DEFAULT_HOST}/;
-    }
-
-    location /loading {
-        proxy_pass ${DEFAULT_HOST}/loading;
-    }
 
     location /account/email/verification {
         rewrite_by_lua_file /etc/nginx/authorise.lua;

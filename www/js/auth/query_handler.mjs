@@ -1,4 +1,4 @@
-import { getNewToken, updateUI } from "./auth0.mjs";
+import { updateUI } from "./auth0.mjs";
 
 export async function checkLoginCode(query) {
   if (query.get("code") && query.get("state")) {
@@ -29,8 +29,8 @@ export async function checkSuccessfulVerification(query) {
   ) {
     // !TODO Show message verification successfull
     history.replaceState({}, "", "/");
-    await getNewToken(true);
-    location.reload();
+    await client.getTokenSilently({ cacheMode: "off" });
+    updateUI();
   }
 }
 

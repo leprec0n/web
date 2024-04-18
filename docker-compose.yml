@@ -1,13 +1,12 @@
 name: leprecon
 services:
   web:
-    image: jarnoweemen/leprecon:1.0.0-web
+    image: jarnoweemen/leprecon
     container_name: web
     volumes:
       - ./www:/usr/local/openresty/nginx/html # Mount static files
     network_mode: host
     environment:
-      DEFAULT_HOST: ${DEFAULT_HOST}
       ACCOUNT_HOST: ${ACCOUNT_HOST}
       AUTH_HOST: ${AUTH_HOST}
       CLIENT_ID: ${CLIENT_ID}

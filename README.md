@@ -17,7 +17,7 @@ docker compose up -d
 Building the project can be done using the following command:
 
 ```bash
-docker build -t jarnoweemen/leprecon:{version}-web .
+docker build -t jarnoweemen/leprecon .
 ```
 
 > Change {version} to the next version following sementics (e.g., 1.0.0)

@@ -5,35 +5,26 @@ import {
   checkSuccessfulVerification,
 } from "./query_handler.mjs";
 
-await getNewToken();
-await updateUI();
+window.onload = async () => {
+  const query = new URL(document.location).searchParams;
 
-const timeDelay = 300000; // 5 minutes in miliseconds
-const query = new URL(document.location).searchParams;
-let tokenRateLimit = 0;
+  await getTokens();
+  await updateUI();
 
-if (query.size !== 0) {
-  checkLoginCode(query);
-  checkAlreadyVerified(query);
-  checkSuccessfulVerification(query);
-  checkAccessExpired(query);
-}
+  if (query.size !== 0) {
+    checkLoginCode(query);
+    checkAlreadyVerified(query);
+    checkSuccessfulVerification(query);
+    checkAccessExpired(query);
+  }
+};
 
-export async function getNewToken(force) {
+export async function getTokens(force) {
   try {
-    if (Date.now() >= tokenRateLimit || force) {
-      const access_token = await client.getTokenSilently({ cacheMode: "off" });
-      tokenRateLimit = Date.now() + timeDelay;
-      return {
-        access_token: access_token,
-        id_token: await client.getIdTokenClaims(),
-      };
-    } else {
-      return {
-        access_token: await client.getTokenSilently(),
-        id_token: await client.getIdTokenClaims(),
-      };
-    }
+    return {
+      access_token: await client.getTokenSilently(),
+      id_token: await client.getIdTokenClaims(),
+    };
   } catch (e) {
     if (e.toString() == "Error: Unknown or invalid refresh token.") {
       logout();
