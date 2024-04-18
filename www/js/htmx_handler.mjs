@@ -49,14 +49,13 @@ document.body.addEventListener("htmx:afterRequest", (e) => {
 
   if (e.detail.requestConfig.verb != "get") {
     if (status.toString().startsWith(2)) {
-      const id = `success-message-${Math.floor(Math.random() * 10000)}`;
-      snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
-      snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
+      const id = `succes-snackbar-${Math.floor(Math.random() * 10000)}`;
+      e.detail.target.childNodes[e.detail.target.childNodes.length - 1].id = id;
       handleSnackbar(id);
     }
 
     if (status.toString().startsWith(4)) {
-      const id = `error-message-${Math.floor(Math.random() * 10000)}`;
+      const id = `error-snackbar-${Math.floor(Math.random() * 10000)}`;
       snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
       snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
       handleSnackbar(id);
