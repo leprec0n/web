@@ -6,6 +6,5 @@ const client = new auth0.Auth0Client({
   authorizationParams: {
     audience: "${AUDIENCE}",
     redirect_uri: window.location.origin,
-    max_age: 300,
   },
 });
