@@ -1,8 +1,16 @@
 # Leprecon
 
-Leprecon is a gambling website written with [htmx](https://htmx.org/).
+Leprecon is a gambling website using [htmx](https://htmx.org/), tailwind, and vanilla js.
 
-## Nginx
+## Requirements
+
+- Docker
+
+### optional
+
+- Node (dev dependencies)
+
+## Nginx/Openresty
 
 Nginx is used as the web server to serve static content to the client. The following command can be run to start the server.
 
@@ -10,14 +18,8 @@ Nginx is used as the web server to serve static content to the client. The follo
 docker compose up -d
 ```
 
-> Remove the -d if you want to see the container logs
+The image used is openresty, which makes it easy to use Lua.
 
-## Building
+## Environment
 
-Building the project can be done using the following command:
-
-```bash
-docker build -t jarnoweemen/leprecon:{version}-web .
-```
-
-> Change {version} to the next version following sementics (e.g., 1.0.0)
+The environment variables are located inside `example.env`, and should be copied to a `.env`.

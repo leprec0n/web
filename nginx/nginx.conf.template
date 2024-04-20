@@ -1,25 +1,38 @@
-include    /etc/nginx/mime.types;
+include    /usr/local/openresty/nginx/conf/mime.types;
 
 server {
     listen 80;
     server_name leprecon;
-    access_log /var/log/nginx/access.log;
-    
-    root /usr/share/nginx/html;
+
+    lua_need_request_body on;
+
+    # Rate limit zone (Global)
+    limit_req zone=client_ip burst=50 nodelay;
+    limit_req_status 429;
+
+    root /usr/local/openresty/nginx/html;
     index index.html;
 
-    error_page 404 /404.html;
+    error_log logs/error.log warn;
 
-    location /home {
-        proxy_pass ${DEFAULT_HOST}/home; # !TODO change to environment variable.
-    }
+    error_page 404 /errors/404.html;
 
-    location /loading {
-        proxy_pass ${DEFAULT_HOST}/loading; # !TODO change to environment variable.
+    location /account/email/verification {
+        rewrite_by_lua_file /etc/nginx/authorise.lua;
+
+        proxy_pass ${ACCOUNT_HOST}/account/email/verification;
     }
 
     location /manifest.json {
         expires 1d;
+    }
+
+    location /_jwk_key {
+        internal;
+        
+        proxy_method      GET;
+        proxy_set_header  Accept-Encoding "";
+        proxy_pass        https://dev-0n8xbsyip7om3vav.eu.auth0.com/.well-known/jwks.json;
     }
 
     # Static content
@@ -39,7 +52,7 @@ server {
     gzip_comp_level 6;
     gzip_buffers 16 8k;
     gzip_http_version 1.1;
-    gzip_min_length 1500;
+    gzip_min_length 1000;
     gzip_types
         application/atom+xml
         application/geo+json

@@ -1,11 +1,15 @@
 name: leprecon
 services:
   web:
-    image: jarnoweemen/leprecon:1.0.0-web
+    image: jarnoweemen/leprecon
     container_name: web
-    volumes:
-      - ./www:/usr/share/nginx/html # Mount static files
-      - ./nginx:/etc/nginx/templates # Mount nginx template (includes environment variables)
     network_mode: host
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
-      DEFAULT_HOST: http://127.0.0.1:8080
+      AUTH_HOST: ${AUTH_HOST}
+      CLIENT_ID: ${CLIENT_ID}
+      ACCOUNT_HOST: ${ACCOUNT_HOST}
+      AUDIENCE: ${AUDIENCE}
+      CACHE_LOCATION: ${CACHE_LOCATION}
