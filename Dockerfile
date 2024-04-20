@@ -3,7 +3,8 @@ FROM openresty/openresty:1.25.3.1-2-alpine-fat
 # Remove default html
 RUN rm -rf /usr/local/openresty/nginx/html
 
-# Copy conf files
+# Copy files
+COPY www/ /usr/local/openresty/nginx/html
 COPY nginx/nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY nginx/nginx.conf.template /etc/nginx/conf.d/server.conf.template
 COPY nginx/lua/authorise.lua /etc/nginx/authorise.lua

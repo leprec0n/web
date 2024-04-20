@@ -12,9 +12,9 @@ jobs:
     secrets:
       SONAR_TOKEN: "${{ secrets.SONAR_TOKEN }}"
   build_and_push:
+    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
     needs: lint
     runs-on: ubuntu-22.04
-    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
     permissions:
       packages: write
     steps:
