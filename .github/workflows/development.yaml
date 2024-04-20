@@ -7,6 +7,10 @@ on:
 jobs:
   lint:
     uses: ./.github/workflows/lint.yaml
+  test:
+    uses: ./.github/workflows/test.yaml
+    secrets:
+      SONAR_TOKEN: "${{ secrets.SONAR_TOKEN }}"
   build_and_push:
     needs: lint
     runs-on: ubuntu-22.04
