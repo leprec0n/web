@@ -6,7 +6,7 @@ on:
         required: false
 jobs:
   static_code_analysis:
-    # if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
+    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
     name: SonarCloud
     runs-on: ubuntu-22.04
     steps:
