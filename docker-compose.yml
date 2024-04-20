@@ -3,12 +3,13 @@ services:
   web:
     image: jarnoweemen/leprecon
     container_name: web
-    volumes:
-      - ./www:/usr/local/openresty/nginx/html # Mount static files
     network_mode: host
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
-      ACCOUNT_HOST: ${ACCOUNT_HOST}
       AUTH_HOST: ${AUTH_HOST}
       CLIENT_ID: ${CLIENT_ID}
+      ACCOUNT_HOST: ${ACCOUNT_HOST}
       AUDIENCE: ${AUDIENCE}
       CACHE_LOCATION: ${CACHE_LOCATION}
