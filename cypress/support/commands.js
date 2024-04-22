@@ -10,9 +10,20 @@
 //
 //
 // -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
+Cypress.Commands.add("login", (user) => {
+  cy.visit("/");
+  cy.get("#login").click();
+
+  cy.origin(Cypress.env("AUTH_HOST"), { args: user }, ({ email, password }) => {
+    cy.fixture("users").as("users");
+    cy.get("#username").type(email);
+    cy.get("#password").type(password);
+    cy.contains("Continue").click();
+  });
+
+  cy.get("#username").should("contain", "test");
+});
+
 // -- This is a child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
 //
