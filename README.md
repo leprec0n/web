@@ -15,7 +15,7 @@ Leprecon is a gambling website using [htmx](https://htmx.org/), tailwind, and va
 Nginx is used as the web server to serve static content to the client. The following command can be run to start the server.
 
 ```bash
-docker compose up -d
+./run.bash
 ```
 
 The image used is openresty, which makes it easy to use Lua.
