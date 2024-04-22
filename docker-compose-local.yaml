@@ -4,6 +4,8 @@ services:
     image: jarnoweemen/leprecon
     container_name: web
     network_mode: host
+    volumes:
+      - ./www:/usr/local/openresty/nginx/html # Mount static files
     build:
       context: .
       dockerfile: Dockerfile

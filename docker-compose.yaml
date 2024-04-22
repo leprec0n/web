@@ -1,0 +1,13 @@
+name: leprecon
+services:
+  web:
+    image: "!TODO Image"
+    container_name: web
+    network_mode: host
+    env_file: .env
+    environment:
+      AUTH_HOST: ${AUTH_HOST}
+      CLIENT_ID: ${CLIENT_ID}
+      ACCOUNT_HOST: ${ACCOUNT_HOST}
+      AUDIENCE: ${AUDIENCE}
+      CACHE_LOCATION: ${CACHE_LOCATION}
