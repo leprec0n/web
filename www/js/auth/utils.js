@@ -20,9 +20,11 @@ function loginState(loggedIn) {
   if (loggedIn) {
     document.getElementById("logout").classList = "visible";
     document.getElementById("login").classList = "hidden invisible";
+    document.getElementById("balance").classList = "visible";
   } else {
     document.getElementById("login").classList = "visible";
     document.getElementById("logout").classList = "hidden invisible";
+    document.getElementById("balance").classList = "hidden invisible";
   }
 }
 

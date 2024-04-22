@@ -63,23 +63,28 @@
         <div>
           <span>Search</span>
         </div>
-        <div class="space-x-2 w-32 justify-end flex">
+        <div class="space-x-2 w-36 justify-end flex">
           <span id="username" class="hidden"></span>
           <button id="login" onclick="login()" class="visible">login</button>
           <button id="logout" onclick="logout()" class="hidden invisible">
             logout
           </button>
+          <div
+            id="balance"
+            class="hidden invisible"
+            hx-get="/account/balance"
+            hx-trigger="intersect once"
+          ></div>
         </div>
       </div>
       <!-- Body -->
       <div class="bg-blue-500 p-3 overflow-y-scroll h-[calc(100vh-5rem)]">
         <!-- Snackbars -->
         <div id="snackbar"></div>
-        <div class="bg-pink-300">
-          <h2 id="verified"></h2>
+        <div id="email-verified" class="bg-pink-300 hidden invisible">
+          <h2 id="verified">Check email to verify account.</h2>
           <button
             id="send-verification-mail"
-            class="hidden invisible"
             hx-post="/account/email/verification"
             hx-target="#snackbar"
             hx-swap="beforeend"

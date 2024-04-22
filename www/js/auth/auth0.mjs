@@ -48,13 +48,9 @@ export async function updateUI() {
 }
 
 async function verificationState(userProfile) {
-  document.getElementById("send-verification-mail").classList =
-    "hidden invisible";
   if (userProfile === null || userProfile.email_verified) {
     return;
   }
 
-  document.getElementById("verified").innerText =
-    "Check email to verify account."; // !TODO Email resend functionality.
-  document.getElementById("send-verification-mail").classList = "visible";
+  document.getElementById("email-verified").classList = "bg-pink-300 visible";
 }
