@@ -23,6 +23,12 @@ server {
         proxy_pass ${ACCOUNT_HOST}/account/email/verification;
     }
 
+    location /account/balance {
+        rewrite_by_lua_file /etc/nginx/authorise.lua;
+
+        proxy_pass ${ACCOUNT_HOST}/account/balance;
+    }
+
     location /manifest.json {
         expires 1d;
     }
