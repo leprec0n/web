@@ -23,3 +23,5 @@ The image used is openresty, which makes it easy to use Lua.
 ## Environment
 
 The environment variables are located inside `example.env`, and should be copied to a `.env`.
+
+Export all .env variables through `export $(cat .env | xargs)`.
