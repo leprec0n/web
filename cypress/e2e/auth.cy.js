@@ -1,16 +1,14 @@
 describe("Auth", () => {
-  it("login", () => {
-    cy.visit("/");
-    cy.get("#login").click();
-
-    cy.origin(Cypress.env("AUTH_HOST"), async () => {
-      cy.fixture("users").then((obj) => {
-        cy.get("#username").type(obj[0].email);
-        cy.get("#password").type(obj[0].password);
-      });
-      cy.contains("Continue").click();
+  beforeEach(() => {
+    cy.fixture("users.json").then((obj) => {
+      cy.login(obj[0]);
     });
+  });
+  it("Logout", () => {
+    cy.get("#username").should("contain", "test");
 
-    expect(cy.get("#username").should("contain", "test"));
+    cy.get("#logout").click();
+
+    cy.get("#username").should("be.hidden");
   });
 });
