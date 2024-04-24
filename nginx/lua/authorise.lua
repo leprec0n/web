@@ -10,10 +10,16 @@ for k, v in pairs(headers) do
 end
 
 -- Get jwks
-local res = ngx.location.capture("/_jwk_key") -- Makes internal request to auth0 jwks endpoint
-local resp_body = res.body
+local shared = ngx.shared.jwks;
+local res = shared:get("jwks"); -- Shared memory
 
-local data = cjson.decode(resp_body);
+if res == nil then
+  res = ngx.location.capture("/_jwk_key").body -- Makes internal request to auth0 jwks endpoint
+  shared:set("jwks", res)
+  shared:expire("jwks", 0) -- Never expire jwks (only resets when the server restarts)
+end
+
+local data = cjson.decode(res);
 local keys = data["keys"];
 local jwks = keys[1];
 
