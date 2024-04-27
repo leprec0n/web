@@ -29,8 +29,9 @@ export async function checkSuccessfulVerification(query) {
   ) {
     // !TODO Show message verification successfull
     history.replaceState({}, "", "/");
-    await client.getTokenSilently({ cacheMode: "off" });
-    updateUI();
+    client.getTokenSilently({ cacheMode: "off" }).then(() => {
+      updateUI();
+    });
   }
 }
 

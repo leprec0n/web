@@ -8,6 +8,15 @@ import {
 let userClaims = null;
 
 window.onload = async () => {
+  localStorage.removeItem("htmx-history-cache");
+
+  if (
+    window.location.pathname != "/" &&
+    !window.location.pathname.includes("/?")
+  ) {
+    console.log("Pushing state");
+    history.pushState({}, "", "/");
+  }
   const query = new URL(document.location).searchParams;
 
   await getTokens();
@@ -62,6 +71,9 @@ export function getUserClaims() {
 
 async function verificationState(email_verified) {
   if (email_verified) {
+    document
+      .getElementById("email-verification-snackbar")
+      .classList.add("invisible", "hidden");
     return;
   }
 
