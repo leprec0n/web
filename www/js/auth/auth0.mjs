@@ -5,6 +5,8 @@ import {
   checkSuccessfulVerification,
 } from "./query_handler.mjs";
 
+let userClaims = null;
+
 window.onload = async () => {
   const query = new URL(document.location).searchParams;
 
@@ -19,7 +21,7 @@ window.onload = async () => {
   }
 };
 
-export async function getTokens(force) {
+export async function getTokens() {
   try {
     return {
       access_token: await client.getTokenSilently(),
@@ -35,20 +37,31 @@ export async function getTokens(force) {
 
 export async function updateUI() {
   const isAuthenticated = await client.isAuthenticated();
+  const claims = await client.getUser();
 
   if (!isAuthenticated) {
-    loginState(false);
+    loginState(false, null);
   } else {
-    const userProfile = await client.getUser();
-    verificationState(userProfile);
-    loginState(true);
-
-    setUserProfile(userProfile);
+    setUserClaims(claims);
+    verificationState(claims.email_verified);
+    loginState(true, claims.nickname);
   }
 }
 
-async function verificationState(userProfile) {
-  if (userProfile === null || userProfile.email_verified) {
+function setUserClaims(claims) {
+  userClaims = claims;
+}
+
+export function getUserClaims() {
+  if (userClaims) {
+    return userClaims;
+  }
+
+  return null;
+}
+
+async function verificationState(email_verified) {
+  if (email_verified) {
     return;
   }
 

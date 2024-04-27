@@ -16,20 +16,15 @@ function logout() {
   });
 }
 
-function loginState(loggedIn) {
-  if (loggedIn) {
-    document.getElementById("logout").classList = "visible";
-    document.getElementById("login").classList = "hidden invisible";
-    document.getElementById("balance").classList = "visible";
-  } else {
-    document.getElementById("login").classList = "visible";
-    document.getElementById("logout").classList = "hidden invisible";
-    document.getElementById("balance").classList = "hidden invisible";
+function loginState(loggedIn, nickname) {
+  if (!loggedIn || !nickname) {
+    return;
   }
-}
 
-function setUserProfile(userProfile) {
-  document.getElementById("username").innerText = userProfile.nickname;
+  document.getElementById("logout").classList = "visible";
+  document.getElementById("login").classList = "hidden invisible";
+  document.getElementById("balance").classList = "visible";
+  document.getElementById("username").innerText = nickname;
   document.getElementById("username").classList = "";
 }
 

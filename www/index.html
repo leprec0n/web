@@ -64,17 +64,21 @@
           <span>Search</span>
         </div>
         <div class="space-x-2 w-36 justify-end flex">
-          <span id="username" class="hidden"></span>
-          <button id="login" onclick="login()" class="visible">login</button>
-          <button id="logout" onclick="logout()" class="hidden invisible">
-            logout
-          </button>
           <div
             id="balance"
             class="hidden invisible"
             hx-get="/account/balance"
             hx-trigger="intersect once"
           ></div>
+          <span
+            id="username"
+            hx-get="/account/user/information"
+            class="hidden"
+          ></span>
+          <button id="login" onclick="login()" class="visible">login</button>
+          <button id="logout" onclick="logout()" class="hidden invisible">
+            logout
+          </button>
         </div>
       </div>
       <!-- Body -->
