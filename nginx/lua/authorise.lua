@@ -1,8 +1,16 @@
 -- Get token
 local cjson = require("cjson");
 local headers= ngx.req.get_headers()
-local params = ngx.req.get_uri_args()
+local method = ngx.var.request_method
+local params = nil
 local token = "";
+
+-- Query params on GET and post args on rest of methods
+if method == "GET" then
+  params = ngx.req.get_uri_args()
+else
+  params = ngx.req.get_post_args()
+end
 
 for k, v in pairs(headers) do
   if k == "authorization" then
@@ -12,7 +20,7 @@ end
 
 -- Get jwks
 local shared = ngx.shared.jwks;
-local res = shared:get("jwks"); -- Shared memory
+local res = shared:get("jwks"); -- Shared memory cache
 
 if res == nil then
   res = ngx.location.capture("/_jwk_key").body -- Makes internal request to auth0 jwks endpoint

@@ -37,6 +37,10 @@ document.body.addEventListener("htmx:configRequest", async (e) => {
   if (bearer && user) {
     e.detail.headers["Authorization"] = `Bearer ${bearer}`;
     e.detail.parameters["sub"] = user.sub;
+
+    if (e.detail.path === "/email/verification") {
+      e.detail.parameters["email_verified"] = user.email_verified;
+    }
   }
 });
 
