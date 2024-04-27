@@ -1,4 +1,4 @@
-import { getTokens, getUserClaims } from "./auth/auth0.mjs";
+import { getToken, getUserClaims } from "./auth/auth0.mjs";
 
 // Handle send errors
 document.body.addEventListener("htmx:sendError", (e) => {
@@ -21,10 +21,10 @@ document.body.addEventListener("htmx:confirm", async (e) => {
   if (isProtectedEndpoint(e.detail.path)) {
     e.preventDefault();
 
-    let tokens = await getTokens();
+    let token = await getToken();
 
-    if (tokens) {
-      e.detail.elt.bearer = tokens;
+    if (token) {
+      e.detail.elt.bearer = token;
       e.detail.issueRequest();
     }
   }
@@ -35,8 +35,7 @@ document.body.addEventListener("htmx:configRequest", async (e) => {
   const bearer = e.detail.elt.bearer;
   const user = getUserClaims();
   if (bearer && user) {
-    e.detail.headers["Authorization"] = `Bearer ${bearer.access_token}`;
-    e.detail.parameters["id_token"] = bearer.id_token.__raw;
+    e.detail.headers["Authorization"] = `Bearer ${bearer}`;
     e.detail.parameters["sub"] = user.sub;
   }
 });

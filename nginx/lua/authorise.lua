@@ -1,6 +1,7 @@
 -- Get token
 local cjson = require("cjson");
 local headers= ngx.req.get_headers()
+local params = ngx.req.get_uri_args()
 local token = "";
 
 for k, v in pairs(headers) do
@@ -28,7 +29,7 @@ local resty_jwt = require("resty.jwt")
 -- local validators = require("resty.jwt-validators")
 local jwt = resty_jwt:load_jwt(token)
 
-local function valid_token(jwt, jwks)
+local function valid_token(jwt, jwks, params)
   -- Check if valid
   if jwt.valid ~= true then
     ngx.log(ngx.WARN, "Invalid token!")
@@ -50,6 +51,12 @@ local function valid_token(jwt, jwks)
   -- Check permissions
   if next(jwt.payload.permissions) == nil then
     ngx.log(ngx.WARN, "Empty permissions")
+    return false
+  end
+
+  -- Check sub
+  if params.sub ~= jwt.payload.sub then
+    ngx.log(ngx.WARN, "Sub not the same")
     return false
   end
 
@@ -82,6 +89,6 @@ local function valid_token(jwt, jwks)
 end
 
 -- Verify jwt
-if not valid_token(jwt, jwks) then
+if not valid_token(jwt, jwks, params) then
   ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end

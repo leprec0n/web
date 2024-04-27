@@ -19,7 +19,7 @@ window.onload = async () => {
   }
   const query = new URL(document.location).searchParams;
 
-  await getTokens();
+  await getToken();
   await updateUI();
 
   if (query.size !== 0) {
@@ -30,12 +30,9 @@ window.onload = async () => {
   }
 };
 
-export async function getTokens() {
+export async function getToken() {
   try {
-    return {
-      access_token: await client.getTokenSilently(),
-      id_token: await client.getIdTokenClaims(),
-    };
+    return await client.getTokenSilently();
   } catch (e) {
     if (e.toString() == "Error: Unknown or invalid refresh token.") {
       logout();
