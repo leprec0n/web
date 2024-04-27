@@ -18,7 +18,7 @@ document.body.addEventListener("htmx:responseError", (e) => {
 
 // !TODO Check if authorised request is made
 document.body.addEventListener("htmx:confirm", async (e) => {
-  if (e.detail.path.includes(protectedEndpoints)) {
+  if (isProtectedEndpoint(e.detail.path)) {
     e.preventDefault();
 
     let tokens = await getTokens();

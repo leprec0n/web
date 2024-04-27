@@ -1,4 +1,4 @@
-const protectedEndpoints = ["/account"]; // !TODO Change endpoint to /account
+const protectedEndpoints = ["/account", "/user", "/email"]; // !TODO Change endpoint to /account
 
 function login() {
   client.loginWithRedirect({
@@ -32,4 +32,16 @@ function handleSnackbar(id) {
   setTimeout(() => {
     document.getElementById(id).outerHTML = "";
   }, 5000);
+}
+
+function isProtectedEndpoint(endpoint) {
+  let isProtected = false;
+  protectedEndpoints.forEach((e) => {
+    if (endpoint.includes(e)) {
+      isProtected = true;
+      return;
+    }
+  });
+
+  return isProtected;
 }

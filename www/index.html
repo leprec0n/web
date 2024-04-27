@@ -58,7 +58,7 @@
     <div class="col-span-8 bg-orange-300">
       <!-- Nav bar (top) -->
       <div
-        class="bg-red-500 p-3 h-20 flex justify-end space-x-20 items-center px-20"
+        class="bg-red-500 p-3 h-20 flex justify-end space-x-24 items-center px-20"
       >
         <div>
           <span>Search</span>
@@ -67,12 +67,14 @@
           <div
             id="balance"
             class="hidden invisible"
-            hx-get="/account/balance"
+            hx-get="/user/balance"
+            hx-swap="outerHTML"
             hx-trigger="intersect once"
           ></div>
           <span
             id="username"
-            hx-get="/account/user/information"
+            hx-get="/user/information"
+            hx-target="#page-body"
             class="hidden"
           ></span>
           <button id="login" onclick="login()" class="visible">login</button>
@@ -85,18 +87,20 @@
       <div class="bg-blue-500 p-3 overflow-y-scroll h-[calc(100vh-5rem)]">
         <!-- Snackbars -->
         <div id="snackbar"></div>
-        <div id="email-verified" class="bg-pink-300 hidden invisible">
-          <h2 id="verified">Check email to verify account.</h2>
-          <button
-            id="send-verification-mail"
-            hx-post="/account/email/verification"
-            hx-target="#snackbar"
-            hx-swap="beforeend"
-          >
-            Send mail
-          </button>
+        <div id="page-body">
+          <div id="email-verified" class="bg-pink-300 hidden invisible">
+            <h2 id="verified">Check email to verify account.</h2>
+            <button
+              id="send-verification-mail"
+              hx-post="/email/verification"
+              hx-target="#snackbar"
+              hx-swap="beforeend"
+            >
+              Send mail
+            </button>
+          </div>
         </div>
-        <footer class="bg-yellow-300">Test</footer>
+        <footer class="bg-yellow-300 bottom-0">Test</footer>
       </div>
     </div>
   </body>
