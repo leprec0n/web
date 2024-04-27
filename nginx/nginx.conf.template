@@ -6,6 +6,8 @@ server {
 
     lua_need_request_body on;
 
+    set $api_key "${API_KEY}";
+
     # Rate limit zone (Global)
     limit_req zone=client_ip burst=50 nodelay;
     limit_req_status 429;
@@ -26,7 +28,13 @@ server {
     location /account/balance {
         rewrite_by_lua_file /etc/nginx/authorise.lua;
 
-        proxy_pass ${ACCOUNT_HOST}/account/balance;
+        proxy_pass ${ACCOUNT_HOST}/account/user/balance;
+    }
+
+    location /account/user {
+        rewrite_by_lua_file /etc/nginx/api_key_validation.lua;
+        
+        proxy_pass ${ACCOUNT_HOST}/account/user;
     }
 
     location /manifest.json {
