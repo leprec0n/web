@@ -65,5 +65,7 @@ async function verificationState(email_verified) {
     return;
   }
 
-  document.getElementById("email-verified").classList = "bg-pink-300 visible";
+  document
+    .getElementById("email-verification-snackbar")
+    .classList.remove("invisible", "hidden");
 }
