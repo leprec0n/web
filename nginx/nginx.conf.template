@@ -17,18 +17,26 @@ server {
 
     error_log logs/error.log warn;
 
-    error_page 404 /errors/404.html;
+    try_files $uri /index.html;
 
-    location /account/email/verification {
+    error_page 401 /;
+
+    location /email/verification {
         rewrite_by_lua_file /etc/nginx/authorise.lua;
 
         proxy_pass ${ACCOUNT_HOST}/account/email/verification;
     }
 
-    location /account/balance {
+    location /user/balance {
         rewrite_by_lua_file /etc/nginx/authorise.lua;
 
         proxy_pass ${ACCOUNT_HOST}/account/user/balance;
+    }
+
+    location /user/information {
+        rewrite_by_lua_file /etc/nginx/authorise.lua;
+
+        proxy_pass ${ACCOUNT_HOST}/account/user/information;
     }
 
     location /account/user {

@@ -1,4 +1,4 @@
-const protectedEndpoints = ["/account"]; // !TODO Change endpoint to /account
+const protectedEndpoints = ["/account", "/user", "/email"]; // !TODO Change endpoint to /account
 
 function login() {
   client.loginWithRedirect({
@@ -16,25 +16,32 @@ function logout() {
   });
 }
 
-function loginState(loggedIn) {
-  if (loggedIn) {
-    document.getElementById("logout").classList = "visible";
-    document.getElementById("login").classList = "hidden invisible";
-    document.getElementById("balance").classList = "visible";
-  } else {
-    document.getElementById("login").classList = "visible";
-    document.getElementById("logout").classList = "hidden invisible";
-    document.getElementById("balance").classList = "hidden invisible";
+function loginState(loggedIn, nickname) {
+  if (!loggedIn || !nickname) {
+    return;
   }
-}
 
-function setUserProfile(userProfile) {
-  document.getElementById("username").innerText = userProfile.nickname;
-  document.getElementById("username").classList = "";
+  document.getElementById("logout").classList = "visible";
+  document.getElementById("login").classList = "hidden invisible";
+  document.getElementById("balance").classList = "visible";
+  document.getElementById("username").innerText = nickname;
+  document.getElementById("username").classList = "cursor-pointer";
 }
 
 function handleSnackbar(id) {
   setTimeout(() => {
     document.getElementById(id).outerHTML = "";
   }, 5000);
+}
+
+function isProtectedEndpoint(endpoint) {
+  let isProtected = false;
+  protectedEndpoints.forEach((e) => {
+    if (endpoint.includes(e)) {
+      isProtected = true;
+      return;
+    }
+  });
+
+  return isProtected;
 }
