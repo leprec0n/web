@@ -13,6 +13,9 @@
     <script src="js/auth/client.js"></script>
     <script type="module" src="js/auth/auth0.mjs"></script>
     <script src="3p/htmx.min.js"></script>
+    <script src="js/auth/utils.js"></script>
+    <script type="module" src="js/htmx_handler.mjs"></script>
+    <script type="module" src="js/auth/query_handler.mjs"></script>
     <link href="css/output.css" rel="stylesheet" />
     <link rel="manifest" href="/manifest.json" />
     <link
@@ -37,7 +40,14 @@
           style="width: 62px; height: 75px"
           src="images/logo/logo.png"
         />
-        <span class="invisible xl:visible font-bold">Leprecon</span>
+        <span
+          id="page-title"
+          hx-get="/components/home.html"
+          hx-push-url="/"
+          hx-target="#page-body"
+          class="invisible xl:visible font-bold cursor-pointer"
+          >Leprecon</span
+        >
       </div>
       <div class="space-y-6">
         <div class="flex flex-col space-y-2 py-3">
@@ -74,6 +84,7 @@
           <span
             id="username"
             hx-get="/user/information"
+            hx-push-url="/user/information"
             hx-target="#page-body"
             class="hidden"
           ></span>
@@ -88,6 +99,13 @@
         <!-- Snackbars -->
         <div id="snackbar"></div>
         <div id="page-body">
+          <div
+            id="home"
+            hx-get="/components/home.html"
+            hx-trigger="load"
+            hx-push-url="/"
+            hx-swap="outerHTML"
+          ></div>
           <div id="email-verified" class="bg-pink-300 hidden invisible">
             <h2 id="verified">Check email to verify account.</h2>
             <button
@@ -104,8 +122,4 @@
       </div>
     </div>
   </body>
-  <script src="js/auth/utils.js"></script>
-  <script type="module" src="js/htmx_handler.mjs"></script>
-  <script type="module" src="js/auth/query_handler.mjs"></script>
-  <footer></footer>
 </html>

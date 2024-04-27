@@ -25,7 +25,7 @@ function loginState(loggedIn, nickname) {
   document.getElementById("login").classList = "hidden invisible";
   document.getElementById("balance").classList = "visible";
   document.getElementById("username").innerText = nickname;
-  document.getElementById("username").classList = "";
+  document.getElementById("username").classList = "cursor-pointer";
 }
 
 function handleSnackbar(id) {
