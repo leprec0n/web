@@ -27,6 +27,12 @@ server {
         proxy_pass ${ACCOUNT_HOST}/account/email/verification;
     }
 
+    location /user {
+        rewrite_by_lua_file /etc/nginx/authorise.lua;
+
+        proxy_pass ${ACCOUNT_HOST}/account/user;
+    }
+
     location /user/balance {
         rewrite_by_lua_file /etc/nginx/authorise.lua;
 

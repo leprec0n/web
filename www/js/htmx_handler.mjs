@@ -49,6 +49,14 @@ document.body.addEventListener("htmx:afterRequest", (e) => {
   const snackbar = document.getElementById("snackbar");
   const status = e.detail.xhr.status;
 
+  if (
+    e.detail.requestConfig.verb == "delete" &&
+    e.detail.pathInfo.requestPath == "/user" &&
+    status.toString().startsWith(2)
+  ) {
+    logout();
+  }
+
   if (e.detail.requestConfig.verb != "get") {
     if (status.toString().startsWith(2)) {
       const id = `succes-snackbar-${Math.floor(Math.random() * 10000)}`;
