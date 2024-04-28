@@ -580,14 +580,6 @@ video {
   grid-column: span 8 / span 8;
 }
 
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
-.mt-10 {
-  margin-top: 2.5rem;
-}
-
 .block {
   display: block;
 }
@@ -788,6 +780,14 @@ body {
   cursor: default;
 }
 
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+/* Scaling */
+
 .mb-10 {
   margin-bottom: 2.5rem;
 }
@@ -795,6 +795,14 @@ body {
 .mt-10 {
   margin-top: 2.5rem;
 }
+
+.space-x-10 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(2.5rem * var(--tw-space-x-reverse));
+  margin-left: calc(2.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+/* Color */
 
 .border-red-400 {
   --tw-border-opacity: 1;
