@@ -14,7 +14,6 @@ window.onload = async () => {
     window.location.pathname != "/" &&
     !window.location.pathname.includes("/?")
   ) {
-    console.log("Pushing state");
     history.pushState({}, "", "/");
   }
   const query = new URL(document.location).searchParams;
