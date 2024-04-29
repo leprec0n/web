@@ -69,12 +69,12 @@ document.body.addEventListener("htmx:afterRequest", (e) => {
       }
       handleSnackbar(id);
     }
+  }
 
-    if (status.toString().startsWith(4) && status !== 401) {
-      const id = `error-snackbar-${Math.floor(Math.random() * 10000)}`;
-      snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
-      snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
-      handleSnackbar(id);
-    }
+  if (status.toString().startsWith(4) && status !== 401) {
+    const id = `error-snackbar-${Math.floor(Math.random() * 10000)}`;
+    snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
+    snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
+    handleSnackbar(id);
   }
 });
