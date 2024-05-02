@@ -28,4 +28,4 @@ Export all .env variables through `export $(cat .env | xargs)`.
 
 ## Tests
 
-Tests are run with cypress. To run all tests use `npx cypress run`.
+Tests are run with cypress. To run all tests use `npx cypress run`. To run specific file `npx cypress run --spec <path/to/file>`.
