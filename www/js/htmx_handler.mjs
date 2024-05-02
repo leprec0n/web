@@ -10,9 +10,11 @@ document.body.addEventListener("htmx:responseError", (e) => {
   const status = e.detail.xhr.status;
 
   if (status.toString().startsWith(5)) {
-    document.getElementById(
-      e.detail.requestConfig.headers["HX-Trigger"],
-    ).innerHTML = "Service down";
+    const errorBar = document.getElementById("error-snackbar");
+    errorBar.classList.remove("hidden", "invisible");
+    setTimeout(() => {
+      errorBar.classList.add("hidden", "invisible");
+    }, 5000);
   }
 });
 

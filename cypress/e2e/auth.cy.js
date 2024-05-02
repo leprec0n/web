@@ -5,7 +5,7 @@ describe("Auth", () => {
     });
   });
   it("Logout", () => {
-    cy.get("#username").should("contain", "test");
+    cy.get("#username").should("contain", "swiftyshadower");
 
     cy.get("#logout").click();
 

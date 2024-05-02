@@ -21,7 +21,7 @@ Cypress.Commands.add("login", (user) => {
     cy.contains("Continue").click();
   });
 
-  cy.get("#username").should("contain", "test");
+  cy.get("#username").should("contain", "swiftyshadower");
 });
 
 // -- This is a child command --
