@@ -1,6 +1,9 @@
 name: Development
 run-name: "${{ github.actor }} ran workflow on ${{ github.ref_name }}"
 on:
+  push:
+    branches:
+      - development
   pull_request:
     branches:
       - main
