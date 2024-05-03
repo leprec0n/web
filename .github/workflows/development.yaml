@@ -19,6 +19,7 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           SONAR_TOKEN: "${{ secrets.SONAR_TOKEN }}"
   build_and_push:
+    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
     needs: lint
     runs-on: ubuntu-22.04
     permissions:
