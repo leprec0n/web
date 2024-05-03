@@ -1,7 +1,16 @@
 -- Get token
 local cjson = require("cjson");
 local headers= ngx.req.get_headers()
+local method = ngx.var.request_method
+local params = nil
 local token = "";
+
+-- Query params on GET and post args on rest of methods
+if method == "GET" then
+  params = ngx.req.get_uri_args()
+else
+  params = ngx.req.get_post_args()
+end
 
 for k, v in pairs(headers) do
   if k == "authorization" then
@@ -10,10 +19,16 @@ for k, v in pairs(headers) do
 end
 
 -- Get jwks
-local res = ngx.location.capture("/_jwk_key") -- Makes internal request to auth0 jwks endpoint
-local resp_body = res.body
+local shared = ngx.shared.jwks;
+local res = shared:get("jwks"); -- Shared memory cache
 
-local data = cjson.decode(resp_body);
+if res == nil then
+  res = ngx.location.capture("/_jwk_key").body -- Makes internal request to auth0 jwks endpoint
+  shared:set("jwks", res)
+  shared:expire("jwks", 0) -- Never expire jwks (only resets when the server restarts)
+end
+
+local data = cjson.decode(res);
 local keys = data["keys"];
 local jwks = keys[1];
 
@@ -22,7 +37,7 @@ local resty_jwt = require("resty.jwt")
 -- local validators = require("resty.jwt-validators")
 local jwt = resty_jwt:load_jwt(token)
 
-local function valid_token(jwt, jwks)
+local function valid_token(jwt, jwks, params)
   -- Check if valid
   if jwt.valid ~= true then
     ngx.log(ngx.WARN, "Invalid token!")
@@ -44,6 +59,12 @@ local function valid_token(jwt, jwks)
   -- Check permissions
   if next(jwt.payload.permissions) == nil then
     ngx.log(ngx.WARN, "Empty permissions")
+    return false
+  end
+
+  -- Check sub
+  if params.sub ~= jwt.payload.sub then
+    ngx.log(ngx.WARN, "Sub not the same")
     return false
   end
 
@@ -76,6 +97,6 @@ local function valid_token(jwt, jwks)
 end
 
 -- Verify jwt
-if not valid_token(jwt, jwks) then
+if not valid_token(jwt, jwks, params) then
   ngx.exit(ngx.HTTP_UNAUTHORIZED)
 end

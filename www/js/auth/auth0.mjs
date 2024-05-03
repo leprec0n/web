@@ -5,10 +5,20 @@ import {
   checkSuccessfulVerification,
 } from "./query_handler.mjs";
 
+let userClaims = null;
+
 window.onload = async () => {
+  localStorage.removeItem("htmx-history-cache");
+
+  if (
+    window.location.pathname != "/" &&
+    !window.location.pathname.includes("/?")
+  ) {
+    history.pushState({}, "", "/");
+  }
   const query = new URL(document.location).searchParams;
 
-  await getTokens();
+  await getToken();
   await updateUI();
 
   if (query.size !== 0) {
@@ -19,12 +29,9 @@ window.onload = async () => {
   }
 };
 
-export async function getTokens(force) {
+export async function getToken() {
   try {
-    return {
-      access_token: await client.getTokenSilently(),
-      id_token: await client.getIdTokenClaims(),
-    };
+    return await client.getTokenSilently();
   } catch (e) {
     if (e.toString() == "Error: Unknown or invalid refresh token.") {
       logout();
@@ -35,26 +42,38 @@ export async function getTokens(force) {
 
 export async function updateUI() {
   const isAuthenticated = await client.isAuthenticated();
+  const claims = await client.getUser();
 
   if (!isAuthenticated) {
-    loginState(false);
+    loginState(false, null);
   } else {
-    const userProfile = await client.getUser();
-    verificationState(userProfile);
-    loginState(true);
-
-    setUserProfile(userProfile);
+    setUserClaims(claims);
+    verificationState(claims.email_verified);
+    loginState(true, claims.nickname);
   }
 }
 
-async function verificationState(userProfile) {
-  document.getElementById("send-verification-mail").classList =
-    "hidden invisible";
-  if (userProfile === null || userProfile.email_verified) {
+function setUserClaims(claims) {
+  userClaims = claims;
+}
+
+export function getUserClaims() {
+  if (userClaims) {
+    return userClaims;
+  }
+
+  return null;
+}
+
+async function verificationState(email_verified) {
+  if (email_verified) {
+    document
+      .getElementById("email-verification-snackbar")
+      .classList.add("invisible", "hidden");
     return;
   }
 
-  document.getElementById("verified").innerText =
-    "Check email to verify account."; // !TODO Email resend functionality.
-  document.getElementById("send-verification-mail").classList = "visible";
+  document
+    .getElementById("email-verification-snackbar")
+    .classList.remove("invisible", "hidden");
 }
