@@ -13,6 +13,6 @@ services:
     environment:
       AUTH_HOST: ${AUTH_HOST}
       CLIENT_ID: ${CLIENT_ID}
-      ACCOUNT_HOST: ${ACCOUNT_HOST}
+      GATEWAY_HOST: ${GATEWAY_HOST}
       AUDIENCE: ${AUDIENCE}
       CACHE_LOCATION: ${CACHE_LOCATION}
