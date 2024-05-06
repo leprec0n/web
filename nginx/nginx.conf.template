@@ -2,7 +2,7 @@ include    /usr/local/openresty/nginx/conf/mime.types;
 
 server {
     # listen domain:80; Change to domain env variable
-    listen 80;
+    listen ${HOST}:80;
     server_name leprecon;
 
     lua_need_request_body on;
