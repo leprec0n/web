@@ -52,30 +52,6 @@ server {
         proxy_pass ${GATEWAY_HOST}/account/user;
     }
 
-    location /user {
-        rewrite_by_lua_file /etc/nginx/authorise.lua;
-
-        proxy_pass ${ACCOUNT_HOST}/account/user;
-    }
-
-    location /user/balance {
-        rewrite_by_lua_file /etc/nginx/authorise.lua;
-
-        proxy_pass ${ACCOUNT_HOST}/account/user/balance;
-    }
-
-    location /user/information {
-        rewrite_by_lua_file /etc/nginx/authorise.lua;
-
-        proxy_pass ${ACCOUNT_HOST}/account/user/information;
-    }
-
-    location /account/user {
-        rewrite_by_lua_file /etc/nginx/api_key_validation.lua;
-        
-        proxy_pass ${ACCOUNT_HOST}/account/user;
-    }
-
     location /manifest.json {
         expires 1d;
     }
