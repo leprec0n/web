@@ -14,10 +14,17 @@ COPY nginx/mime.types /usr/local/openresty/nginx/conf/mime.types
 COPY entrypoint.sh /etc/nginx/entrypoint.sh
 
 # Install dependencies for jwt authorisation
-RUN apk update && apk upgrade && apk add pkgconfig openssl-dev
+RUN apk update && apk upgrade && apk add pkgconfig openssl openssl-dev certbot
 RUN opm get SkyLothar/lua-resty-jwt
 RUN luarocks install openssl
 RUN luarocks install lua-resty-rsa
+RUN luarocks install lua-resty-auto-ssl
+RUN mkdir /etc/resty-auto-ssl
+RUN chown root /etc/resty-auto-ssl
+RUN openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 \
+      -subj '/CN=sni-support-required-for-valid-ssl' \
+      -keyout /etc/ssl/resty-auto-ssl-fallback.key \
+      -out /etc/ssl/resty-auto-ssl-fallback.crt
 ENTRYPOINT ["/etc/nginx/entrypoint.sh"]
 
 # Start NGINX
