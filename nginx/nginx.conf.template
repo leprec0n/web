@@ -1,8 +1,16 @@
 include    /usr/local/openresty/nginx/conf/mime.types;
 
 server {
-    # listen domain:80; Change to domain env variable
     listen ${HOST}:80;
+
+    # SSL
+    listen ${HOST}:443 ssl;
+    ssl_certificate_by_lua_block {
+      auto_ssl:ssl_certificate()
+    }
+    ssl_certificate /etc/ssl/resty-auto-ssl-fallback.crt;
+    ssl_certificate_key /etc/ssl/resty-auto-ssl-fallback.key;
+    
     server_name leprecon;
 
     lua_need_request_body on;
