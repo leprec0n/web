@@ -18,6 +18,7 @@ RUN apk update && apk upgrade && apk add pkgconfig openssl openssl-dev certbot
 RUN opm get SkyLothar/lua-resty-jwt
 RUN luarocks install openssl
 RUN luarocks install lua-resty-rsa
+RUN luarocks install lua-resty-openssl
 RUN luarocks install lua-resty-auto-ssl
 RUN mkdir /etc/resty-auto-ssl
 RUN chown root /etc/resty-auto-ssl

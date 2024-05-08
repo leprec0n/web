@@ -1,10 +1,8 @@
 include    /usr/local/openresty/nginx/conf/mime.types;
 
 server {
-    listen ${HOST}:80;
-
     # SSL
-    listen ${HOST}:443 ssl;
+    listen ${HOST}:443 ssl default_server;
     ssl_certificate_by_lua_block {
       auto_ssl:ssl_certificate()
     }
