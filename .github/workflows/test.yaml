@@ -23,7 +23,7 @@ jobs:
           CACHE_LOCATION: localstorage
         credentials:
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.ghcr_password }}
+          password: ${{ github.secrets.ghcr_password }}
       account:
         image: ghcr.io/leprec0n/microservices/account:latest
         ports:
@@ -42,7 +42,7 @@ jobs:
           SUB_NOT_VERIFIED: ${{ github.secrets.SUB_NOT_VERIFIED }}
         credentials:
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.ghcr_password }}
+          password: ${{ github.secrets.ghcr_password }}
         options: --restart always
       account-db:
         image: postgres:16.2-alpine3.19
