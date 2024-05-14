@@ -2,7 +2,7 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: "https://web",
+    baseUrl: "https://0.0.0.0",
     video: false,
     setupNodeEvents(on, config) {
       require("@cypress/code-coverage/task")(on, config);
