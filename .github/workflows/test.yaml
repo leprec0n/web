@@ -60,7 +60,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - name: Install packages
-        run: npm install --only=dev
+        run: npm install
       - name: End to end tests
         run: npx nyc --reporter=lcov cypress run --env AUTH_HOST=${{ secrets.CYPRESS_AUTH_HOST }}
       - name: SonarCloud scan
