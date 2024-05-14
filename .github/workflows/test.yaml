@@ -60,6 +60,8 @@ jobs:
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - name: Install packages
         run: npm install --only=dev
+      - name: export auth host
+        run: export AUTH_HOST=${{ secrets.AUTH_HOST }}
       - name: End to end tests
         run: npx nyc --reporter=lcov cypress run
       - name: SonarCloud scan
