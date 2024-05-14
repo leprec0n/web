@@ -25,6 +25,8 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
         options: --restart always
+        depends-on:
+          - account
       account:
         image: ghcr.io/leprec0n/microservices/account:latest
         ports:
@@ -45,6 +47,9 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
         options: --restart always
+        depends-on:
+          - account-db
+          - session-db
       account-db:
         image: postgres:16.2-alpine3.19
         env:
