@@ -16,8 +16,8 @@ jobs:
           - 443:443
         env:
           HOST: 0.0.0.0
-          AUTH_HOST: ${{ github.secrets.AUTH_HOST }}
-          CLIENT_ID: ${{ github.secrets.CIENT_ID }}
+          AUTH_HOST: ${{ secrets.AUTH_HOST }}
+          CLIENT_ID: ${{ secrets.CIENT_ID }}
           GATEWAY_HOST: http://account:8080
           AUDIENCE: http://127.0.0.1:80
           CACHE_LOCATION: localstorage
@@ -34,12 +34,12 @@ jobs:
           ALLOW_ORIGIN: http://web:80
           DB_CONN: postgresql://postgres:postgres@account-db
           ACCOUNT_CONN: postgresql://postgres:postgres@account-db/account
-          AUTH_HOST: ${{ github.secrets.AUTH_HOST }}
-          CLIENT_ID_ACCOUNT: ${{ github.secrets.CLIENT_ID_ACCOUNT }}
-          CLIENT_SECRET_ACCOUNT: ${{ github.secrets.CLIENT_SECRET_ACCOUNT }}
-          CLIENT_AUD_ACCOUNT: ${{ github.secrets.CLIENT_AUD_ACCOUNT }}
+          AUTH_HOST: ${{ secrets.AUTH_HOST }}
+          CLIENT_ID_ACCOUNT: ${{ secrets.CLIENT_ID_ACCOUNT }}
+          CLIENT_SECRET_ACCOUNT: ${{ secrets.CLIENT_SECRET_ACCOUNT }}
+          CLIENT_AUD_ACCOUNT: ${{ secrets.CLIENT_AUD_ACCOUNT }}
           VALKEY_CONN: redis://session-db:6379
-          SUB_NOT_VERIFIED: ${{ github.secrets.SUB_NOT_VERIFIED }}
+          SUB_NOT_VERIFIED: ${{ secrets.SUB_NOT_VERIFIED }}
         credentials:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
