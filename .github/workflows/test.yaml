@@ -42,7 +42,7 @@ jobs:
           SUB_NOT_VERIFIED: ${{ github.secrets.SUB_NOT_VERIFIED }}
         credentials:
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ github.secrets.REGISTRY_PASSWORD }}
         options: --restart always
       account-db:
         image: postgres:16.2-alpine3.19
