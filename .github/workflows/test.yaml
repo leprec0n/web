@@ -18,7 +18,7 @@ jobs:
           HOST: 0.0.0.0
           AUTH_HOST: ${{ secrets.AUTH_HOST }}
           CLIENT_ID: ${{ secrets.CIENT_ID }}
-          GATEWAY_HOST: http://127.0.0.1:8080
+          GATEWAY_HOST: http://account:8080
           AUDIENCE: http://127.0.0.1:80
           CACHE_LOCATION: localstorage
         credentials:
