@@ -57,7 +57,7 @@ jobs:
           - 6379:6379
     steps:
       - name: Install packages
-        run: npm install --only=dev
+        run: npm install
       - name: End to end tests
         run: npx nyc --reporter=lcov cypress run
       - name: Checkout repository
