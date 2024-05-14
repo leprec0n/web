@@ -24,6 +24,7 @@ jobs:
         credentials:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+        options: --restart always
       account:
         image: ghcr.io/leprec0n/microservices/account:latest
         ports:
