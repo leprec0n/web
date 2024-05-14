@@ -18,7 +18,7 @@ jobs:
           HOST: 0.0.0.0
           AUTH_HOST: ${{ secrets.AUTH_HOST }}
           CLIENT_ID: ${{ secrets.CIENT_ID }}
-          GATEWAY_HOST: http://account:8080
+          GATEWAY_HOST: http://127.0.0.1:8080
           AUDIENCE: http://127.0.0.1:80
           CACHE_LOCATION: localstorage
         credentials:
@@ -32,13 +32,13 @@ jobs:
           ACCOUNT_HOST: 0.0.0.0:8080
           LOG_LEVEL: debug
           ALLOW_ORIGIN: http://web:80
-          DB_CONN: postgresql://postgres:postgres@account-db
-          ACCOUNT_CONN: postgresql://postgres:postgres@account-db/account
+          DB_CONN: postgresql://postgres:postgres@127.0.0.1
+          ACCOUNT_CONN: postgresql://postgres:postgres@127.0.0.1/account
           AUTH_HOST: ${{ secrets.AUTH_HOST }}
           CLIENT_ID_ACCOUNT: ${{ secrets.CLIENT_ID_ACCOUNT }}
           CLIENT_SECRET_ACCOUNT: ${{ secrets.CLIENT_SECRET_ACCOUNT }}
           CLIENT_AUD_ACCOUNT: ${{ secrets.CLIENT_AUD_ACCOUNT }}
-          VALKEY_CONN: redis://session-db:6379
+          VALKEY_CONN: redis://127.0.0.1:6379
           SUB_NOT_VERIFIED: ${{ secrets.SUB_NOT_VERIFIED }}
         credentials:
           username: ${{ github.repository_owner }}
