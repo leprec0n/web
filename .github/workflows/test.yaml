@@ -31,7 +31,7 @@ jobs:
           - 8080:8080
         env:
           ACCOUNT_HOST: 0.0.0.0:8080
-          LOG_LEVEL: debug
+          LOG_LEVEL: trace
           ALLOW_ORIGIN: http://0.0.0.0:80
           DB_CONN: postgresql://postgres:postgres@account-db
           ACCOUNT_CONN: postgresql://postgres:postgres@account-db/account
