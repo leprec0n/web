@@ -13,6 +13,7 @@ jobs:
         image: ghcr.io/leprec0n/web:latest
         ports:
           - 80:80
+          - 443:443
         env:
           HOST: 0.0.0.0
           AUTH_HOST: ${{ github.secrets.AUTH_HOST }}
