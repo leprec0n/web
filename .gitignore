@@ -5,3 +5,5 @@ www/js/auth/client.js
 cypress/screenshots
 .nyc_output
 coverage
+instrumented/3p
+instrumented/js
