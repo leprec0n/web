@@ -3,3 +3,5 @@ node_modules
 www/js/auth/client.js
 .vscode
 cypress/screenshots
+.nyc_output
+coverage
