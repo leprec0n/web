@@ -65,6 +65,8 @@ jobs:
         run: npm install
       - name: Instrument js files
         run: npx nyc instrument --compact=false www instrumented
+      - name: Run health check
+        run: ./health_check.sh
       - name: End to end tests
         run: npx cypress run --env AUTH_HOST=${{ secrets.CYPRESS_AUTH_HOST }}
       - name: Show summaries
