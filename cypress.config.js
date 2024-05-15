@@ -4,6 +4,7 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: "https://127.0.0.1",
     video: false,
+    chromeWebSecurity: false,
     setupNodeEvents(on, config) {
       require("@cypress/code-coverage/task")(on, config);
       return config;
