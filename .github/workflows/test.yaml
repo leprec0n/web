@@ -11,6 +11,8 @@ jobs:
     services:
       web:
         image: ghcr.io/leprec0n/web:latest
+        volumes:
+          - ./instrumented:/usr/local/openresty/nginx/html
         ports:
           - 80:80
           - 443:443
@@ -61,8 +63,12 @@ jobs:
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - name: Install packages
         run: npm install
+      - name: Instrument js files
+        run: npx nyc instrument --compact=false www instrumented
       - name: End to end tests
-        run: npx nyc --reporter=lcov cypress run --env AUTH_HOST=${{ secrets.CYPRESS_AUTH_HOST }}
+        run: npx cypress run --env AUTH_HOST=${{ secrets.CYPRESS_AUTH_HOST }}
+      - name: Show summaries
+        run: npx nyc report --reporter=text-summary
       - name: SonarCloud scan
         uses: SonarSource/sonarcloud-github-action@49e6cd3b187936a73b8280d59ffd9da69df63ec9 # v2.1.1
         env:

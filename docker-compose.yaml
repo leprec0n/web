@@ -7,6 +7,8 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file: .env
+    volumes:
+      - ./instrumented:/usr/local/openresty/nginx/html
     networks:
       - leprecon-network
     ports:
