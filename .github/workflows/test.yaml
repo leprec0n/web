@@ -59,8 +59,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
-      - name: Health check
-        run: SUB_NOT_VERIFIED="${{ secrets.SUB_NOT_VERIFIED }}" ./health_check.sh
       - name: Install packages
         run: npm install
       - name: End to end tests
