@@ -58,6 +58,11 @@ server {
         proxy_pass ${GATEWAY_HOST}/account/user;
     }
 
+    location /catalog {
+        proxy_pass ${GATEWAY_HOST}/game/catalog;
+    }
+
+
     location /manifest.json {
         expires 1d;
     }
