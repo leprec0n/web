@@ -1,4 +1,4 @@
-const protectedEndpoints = ["/account", "/user", "/email"]; // !TODO Change endpoint to /account
+const protectedEndpoints = ["/account", "/user", "/email"];
 
 function login() {
   client.loginWithRedirect({
@@ -39,7 +39,6 @@ function isProtectedEndpoint(endpoint) {
   protectedEndpoints.forEach((e) => {
     if (endpoint.includes(e)) {
       isProtected = true;
-      return;
     }
   });
 
