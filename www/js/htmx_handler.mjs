@@ -1,9 +1,7 @@
 import { getToken, getUserClaims } from "./auth/auth0.mjs";
 
 // Handle send errors
-document.body.addEventListener("htmx:sendError", (e) => {
-  // !TODO Handle send errors
-});
+document.body.addEventListener("htmx:sendError", (e) => {});
 
 // Handles general response errors
 document.body.addEventListener("htmx:responseError", (e) => {
@@ -18,7 +16,6 @@ document.body.addEventListener("htmx:responseError", (e) => {
   }
 });
 
-// !TODO Check if authorised request is made
 document.body.addEventListener("htmx:confirm", async (e) => {
   if (isProtectedEndpoint(e.detail.path)) {
     e.preventDefault();
@@ -32,7 +29,6 @@ document.body.addEventListener("htmx:confirm", async (e) => {
   }
 });
 
-// !TODO Check if authorised request is made
 document.body.addEventListener("htmx:configRequest", async (e) => {
   const bearer = e.detail.elt.bearer;
   const user = getUserClaims();
@@ -61,7 +57,10 @@ document.body.addEventListener("htmx:afterRequest", (e) => {
 
   if (e.detail.requestConfig.verb != "get") {
     if (status.toString().startsWith(2)) {
-      const id = `succes-snackbar-${Math.floor(Math.random() * 10000)}`;
+      const crypto = window.crypto || window.msCrypto;
+      let array = new Uint32Array(1);
+      crypto.getRandomValues(array);
+      const id = `succes-snackbar-${Math.floor(array[0] * 10000)}`;
       if (e.detail.target.id === "snackbar") {
         e.detail.target.childNodes[e.detail.target.childNodes.length - 1].id =
           id;
@@ -74,7 +73,10 @@ document.body.addEventListener("htmx:afterRequest", (e) => {
   }
 
   if (status.toString().startsWith(4) && status !== 401) {
-    const id = `error-snackbar-${Math.floor(Math.random() * 10000)}`;
+    const crypto = window.crypto || window.msCrypto;
+    let array = new Uint32Array(1);
+    crypto.getRandomValues(array);
+    const id = `error-snackbar-${Math.floor(array[0] * 10000)}`;
     snackbar.insertAdjacentHTML("beforeend", e.detail.xhr.response);
     snackbar.childNodes[snackbar.childNodes.length - 1].id = id;
     handleSnackbar(id);

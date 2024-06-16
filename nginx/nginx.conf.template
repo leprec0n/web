@@ -1,6 +1,8 @@
 include    /usr/local/openresty/nginx/conf/mime.types;
 
 server {
+    server_name ${SERVER_NAME};
+
     # SSL
     listen ${HOST}:443 ssl default_server;
     ssl_certificate_by_lua_block {
@@ -116,7 +118,7 @@ server {
 }
 
 server {
-    listen 127.0.0.1:8999;
+    listen 8999;
     client_body_buffer_size 128k;
     client_max_body_size 128k;
 
